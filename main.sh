@@ -12,14 +12,11 @@ set -ex
 [[ ! "$ID_FILE" ]] && ID_FILE=ids.json && echo ID_FILE , use $ID_FILE
 ## keeper_run run ENVS
 [[ ! "$CLUSTER" ]] && KEEPER_CLUSTER=testnet && echo KEEPER_CLUSTER , use $KEEPER_CLUSTER
-[[ ! "$KEEPER_GROUP" ]] && KEEPER_GROUP=testnet && echo KEEPER_GROUP , use $KEEPER_GROUP
-[[ ! "$KEEPER_ENDPOINT" ]] && KEEPER_ENDPOINT="api.testnet.solana.com" && echo KEEPER_ENDPOINT , use $KEEPER_ENDPOINT
 ## solana build repo ENVS
-[[ ! "$MANGO_BENCHER_REPO" ]]&& MANGO_BENCHER_REPO=https://github.com/solana-labs/mango-simulation.git && echo MANGO_BENCHER_REPO env not found, use $MANGO_BENCHER_REPO
-[[ ! "$MANGO_BENCHER_BRANCH" ]]&& MANGO_BENCHER_BRANCH=main && echo MANGO_BENCHER_BRANCH env not found, use $MANGO_BENCHER_BRANCH
+[[ ! "$MANGO_SIMULATION_REPO" ]]&& MANGO_SIMULATION_REPO=https://github.com/solana-labs/mango-simulation.git && echo MANGO_SIMULATION_REPO env not found, use $MANGO_SIMULATION_REPO
+[[ ! "$MANGO_SIMULATION_BRANCH" ]]&& MANGO_SIMULATION_BRANCH=main && echo MANGO_SIMULATION_BRANCH env not found, use $MANGO_SIMULATION_BRANCH
 [[ ! "$MANGO_CONFIGURE_REPO" ]]&& MANGO_CONFIGURE_REPO=https://github.com/solana-labs/configure_mango.git && echo MANGO_CONFIGURE_REPO env not found, use $MANGO_CONFIGURE_REPO
 [[ ! "$MANGO_CONFIGURE_BRANCH" ]]&& MANGO_CONFIGURE_BRANCH=main && echo MANGO_CONFIGURE_BRANCH env not found, use $MANGO_CONFIGURE_BRANCH
-
 
 ## CI program ENVS
 [[ ! "$GIT_TOKEN" ]]&& echo GIT_TOKEN env not found && exit 1

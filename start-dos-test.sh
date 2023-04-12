@@ -13,15 +13,13 @@ source $HOME/dos-metrics-env.sh
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
 [[ ! "$ACCOUNT_FILE" ]]&&echo no ACCOUNT_FILE && exit 1
-[[ ! "$KEEPER_GROUP" ]] && echo no KEEPER_GROUP && exit 1
-[[ ! "$KEEPER_ENDPOINT" ]] && echo no KEEPER_ENDPOINT && exit 1
 
 #### metrics env ####
 echo SOLANA_METRICS_CONFIG=\"$SOLANA_METRICS_CONFIG\" >> dos-env.out
 #### keeper ENV ####
 export CLUSTER=$CLUSTER
-export GROUP=$KEEPER_GROUP
-export ENDPOINT_URL=$KEEPER_ENDPOINT
+
+
 
 
 download_file() {
