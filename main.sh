@@ -1,13 +1,12 @@
 
 #!/usr/bin/env bash
 set -ex
-source utils.sh
 ## Directory settings
 dos_program_dir=$(pwd)
-
+echo ----- stage: import envs and export Env to metrics --- 
+source env-artifcat.sh
 echo ----- stage: get cluster version and git information for buildkite-agent --- 
 get_testnet_ver
-
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
 # setup Envs here so that generate-exec-files.sh can be used individually
 source generate-exec-dependency.sh
@@ -33,9 +32,9 @@ client_num=1
 for sship in "${instance_ip[@]}"
 do
     if $client_num -eq 1;then
-        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < exec-start-build-dependency-build.sh)
+        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh true)
     else
-        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < exec-start-build-dependency-download.sh)
+        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh false)
     fi
     let client_num=$client_num+1
 done
