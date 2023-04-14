@@ -7,7 +7,7 @@ echo ----- stage: show envs upload as an artifcat ----
 cat env-artifact-local.sh
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
 # setup Envs here so that generate-exec-files.sh can be used individually
-accounts=( "$ACCOUNTS" )
+# accounts=( "$ACCOUNTS" )
 #Generate first dos-test machine
 # source generate-exec-dos-test.sh
 # acct_num=1
@@ -31,7 +31,8 @@ dependency_arg2="gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUIL
 for sship in "${instance_ip[@]}"
 do
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
-    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh $dependency_arg1 $dependency_arg2)
+    [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
+    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh $dependency_arg1 $dependency_arg2)
     (( client_num++ )) || true
 done
 

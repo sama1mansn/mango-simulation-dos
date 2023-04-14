@@ -12,15 +12,19 @@ download_file() {
 		if [[ $retry -gt 1 ]];then
 			break
 		fi
-		gsutil cp  gs://mango-simulation-private/$1 ./
+		gsutil cp "$1" "$2"
 		if [[ ! -f "$1" ]];then
-			echo "NO $1 found, retry"
-            sleep 5
+			echo "NO "$1" found, retry"
 		else
 			break
 		fi
 	done
 }
+upload_file() {
+	gsutil cp  "$1" "$2"
+}
+
+download_file "$ENV_ARTIFACT" "$HOME"
 
 function get_testnet_ver() {
     local ret
