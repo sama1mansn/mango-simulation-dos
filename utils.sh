@@ -12,7 +12,7 @@ download_file() {
 		if [[ $retry -gt 1 ]];then
 			break
 		fi
-		gsutil cp  gs://mango_bencher-dos/$1 ./
+		gsutil cp  gs://mango-simulation-private/$1 ./
 		if [[ ! -f "$1" ]];then
 			echo "NO $1 found, retry"
             sleep 5
@@ -21,6 +21,7 @@ download_file() {
 		fi
 	done
 }
+
 function get_testnet_ver() {
     local ret
     for retry in 0 1 2
