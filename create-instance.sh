@@ -12,7 +12,7 @@ else
 fi
 
 function create_gce() {
-	local vm_name=mango-bencher-tester-`date +%y%m%d-%H-%M-%S`
+	local vm_name=mango-simulator-tester-`date +%y%m%d-%H-%M-%S`
 	local project=principal-lane-200702
 	local img_name=$GC_IMAGE
 	local machine_type=n1-standard-32
