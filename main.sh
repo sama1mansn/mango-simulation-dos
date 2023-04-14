@@ -1,48 +1,9 @@
 
 #!/usr/bin/env bash
 set -ex
-# Check ENVS
-## mango_bench setup ENVS
-[[ ! "$RUST_LOG" ]]&& RUST_LOG=info && echo RUST_LOG env not found, use $RUST_LOG
-[[ ! "$ENDPOINT" ]]&& echo ENDPOINT env not found && exit 1
-[[ ! "$DURATION" ]]&& echo DURATION env not found && exit 1
-[[ ! "$QOUTES_PER_SECOND" ]]&& echo ENDPOINT env not found && exit 1
-[[ ! "$ACCOUNTS" ]]&& ACCOUNTS="accounts-1_20.json accounts-2_20.json accounts-3_10.json" && echo ACCOUNTS not found, use $ACCOUNTS
-[[ ! "$AUTHORITY_FILE" ]] && AUTHORITY_FILE=authority.json && echo AUTHORITY_FILE , use $AUTHORITY_FILE
-[[ ! "$ID_FILE" ]] && ID_FILE=ids.json && echo ID_FILE , use $ID_FILE
-## keeper_run run ENVS
-[[ ! "$CLUSTER" ]] && KEEPER_CLUSTER=testnet && echo KEEPER_CLUSTER , use $KEEPER_CLUSTER
-## solana build repo ENVS
-[[ ! "$MANGO_SIMULATION_REPO" ]]&& MANGO_SIMULATION_REPO=https://github.com/solana-labs/mango-simulation.git && echo MANGO_SIMULATION_REPO env not found, use $MANGO_SIMULATION_REPO
-[[ ! "$MANGO_SIMULATION_BRANCH" ]]&& MANGO_SIMULATION_BRANCH=main && echo MANGO_SIMULATION_BRANCH env not found, use $MANGO_SIMULATION_BRANCH
-[[ ! "$MANGO_CONFIGURE_REPO" ]]&& MANGO_CONFIGURE_REPO=https://github.com/solana-labs/configure_mango.git && echo MANGO_CONFIGURE_REPO env not found, use $MANGO_CONFIGURE_REPO
-[[ ! "$MANGO_CONFIGURE_BRANCH" ]]&& MANGO_CONFIGURE_BRANCH=main && echo MANGO_CONFIGURE_BRANCH env not found, use $MANGO_CONFIGURE_BRANCH
-
-## CI program ENVS
-[[ ! "$GIT_TOKEN" ]]&& echo GIT_TOKEN env not found && exit 1
-[[ ! "$GIT_REPO" ]]&& GIT_REPO=$BUILDKITE_REPO && GIT_REPO not found, use $GIT_REPO
-[[ ! "$NUM_CLIENT" || $NUM_CLIENT -eq 0 ]]&& echo NUM_CLIENT env invalid && exit 1
-[[ ! "$AVAILABLE_ZONE" ]]&& echo AVAILABLE_ZONE env not found && exit 1
-[[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found && exit 1
-[[ ! "$RUN_BENCH_AT_TS_UTC" ]]&& RUN_BENCH_AT_TS_UTC=0 && echo RUN_BENCH_AT_TS_UTC env not found, use $RUN_BENCH_AT_TS_UTC
-[[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
 source utils.sh
 ## Directory settings
 dos_program_dir=$(pwd)
-BUILD_DEPENDENCY_BENCHER_DIR=/home/sol/mango_simulation
-BUILD_DEPENDENCY_CONFIGURE_DIR=/home/sol/configure_mango
-
-echo ----- stage: prepare metrics env ------ 
-[[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
-download_file dos-metrics-env.sh
-[[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
-source dos-metrics-env.sh
-
-echo ----- stage: prepare ssh key to dynamic clients ------
-download_file id_ed25519_dos_test
-[[ ! -f "id_ed25519_dos_test" ]]&& echo "no id_ed25519_dos_test found" && exit 1
-chmod 600 id_ed25519_dos_test
-ls -al id_ed25519_dos_test
 
 echo ----- stage: get cluster version and git information for buildkite-agent --- 
 get_testnet_ver

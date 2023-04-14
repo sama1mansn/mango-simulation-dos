@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -ex
+echo ----- stage: checkout buildkite Steps Env ------ 
 ## mango_bench setup ENVS
 [[ ! "$RUST_LOG" ]]&& RUST_LOG=info && echo RUST_LOG env not found, use $RUST_LOG
 [[ ! "$ENDPOINT" ]]&& echo ENDPOINT env not found && exit 1
@@ -24,21 +26,27 @@
 [[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found && exit 1
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
 
-echo ----- stage: prepare keys and files  ------
 source utils.sh
+echo ----- stage: prepare metrics env ------ 
+[[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
+download_file dos-metrics-env.sh
+[[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
+
+echo ----- stage: prepare ssh key to dynamic clients ------
 download_file id_ed25519_dos_test
 [[ ! -f "id_ed25519_dos_test" ]]&& echo "no id_ed25519_dos_test found" && exit 1
 chmod 600 id_ed25519_dos_test
-# Env From Steps
+
+echo ----- stage: prepare env-artifact for clients ------
 ## Mango-simulation Envs
-echo "export RUST_LOG=$RUST_LOG" >> env-artifact.sh
+echo "export RUST_LOG=$RUST_LOG" > env-artifact.sh
 echo "export ENDPOINT=$ENDPOINT" >> env-artifact.sh
 echo "export DURATION=$DURATION" >> env-artifact.sh
 echo "export QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> env-artifact.sh
 echo "export AUTHORITY_FILE=$AUTHORITY_FILE" >> env-artifact.sh
 echo "export ID_FILE=$ID_FILE" >> env-artifact.sh
 # Keeper Run Envs
-echo "export KEEPER_CLUSTER=$KEEPER_CLUSTER" >> env-artifact.sh
+echo "export CLUSTER=$CLUSTER" >> env-artifact.sh
 #mango-simulation build repo ENVS
 echo "export MANGO_SIMULATION_REPO=$MANGO_SIMULATION_REPO" >> env-artifact.sh
 echo "export MANGO_SIMULATION_BRANCH=$MANGO_SIMULATION_BRANCH" >> env-artifact.sh
@@ -54,3 +62,6 @@ echo "export NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "export AVAILABLE_ZONE=$AVAILABLE_ZONE" >> env-artifact.sh
 echo "export SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
 echo "export KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
+## Metric Env
+cat dos-metrics-env.sh >> env-artifact.sh
+exit 0
