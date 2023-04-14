@@ -65,4 +65,6 @@ echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
 echo "ENV_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/env-artifact.sh" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/mango-simulation" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
+# after env-artifact.sh loaded, the buildkite delete it. here to keep a copy of it.
+cp env-artifact.sh env-artifact-local.sh
 exit 0

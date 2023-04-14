@@ -3,13 +3,10 @@
 set -ex
 ## Directory settings
 dos_program_dir=$(pwd)
-echo ----- stage: import envs and export Env to metrics --- 
-source env-artifcat.sh
-echo ----- stage: get cluster version and git information for buildkite-agent --- 
-get_testnet_ver
+echo ----- stage: show envs upload as an artifcat ---- 
+cat env-artifact-local.sh
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
 # setup Envs here so that generate-exec-files.sh can be used individually
-source generate-exec-dependency.sh
 accounts=( $ACCOUNTS )
 #Generate first dos-test machine
 source generate-exec-dos-test.sh
@@ -32,9 +29,9 @@ client_num=1
 for sship in "${instance_ip[@]}"
 do
     if $client_num -eq 1;then
-        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh true)
+        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh "true")
     else
-        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh false)
+        ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'bash -s' < start-build-dependency.sh "false")
     fi
     let client_num=$client_num+1
 done
@@ -67,6 +64,7 @@ get_time_before $stop_time 5
 stop_time_adjust=$outcom_in_sec
 
 echo ----- stage: DOS report ------
+get_testnet_ver
 ## PASS ENV
 [[ $SLACK_WEBHOOK ]]&&echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> dos-report-env.sh
 [[ $DISCORD_WEBHOOK ]]&&echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> dos-report-env.sh
