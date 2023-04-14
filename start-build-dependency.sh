@@ -2,11 +2,13 @@
 ## env
 set -ex
 ## Download key files from gsutil
-if [[ "$1" != "true" || "$1" != "false" ]];then 
-	BUILD_MANGO_SIMULATOR="false"
+if [[ "$1" != "true" && "$1" != "false" ]];then 
+	BUILD_MANGO_SIMULATOR=false
 else
 	BUILD_MANGO_SIMULATOR=$1
 fi
+[[ ! "$2" ]]&& echo "No ENV_ARTIFACT" && exit 1
+ENV_ARTIFACT="$2"
 
 download_file() {
 	for retry in 0 1
@@ -28,9 +30,9 @@ upload_file() {
 
 download_file "$ENV_ARTIFACT" "$HOME"
 sleep 5
-[[ ! -f "$ENV_ARTIFACT" ]] && echo no $ENV_ARTIFACT downloaded && exit 2
+[[ ! -f "env-artifact.sh" ]] && echo no "env-artifact.sh" downloaded && exit 2
+# shellcheck source=/dev/null
 source env-artifact.sh
-
 
 ## preventing lock-file build fail, 
 ## also need to disable software upgrade in image
