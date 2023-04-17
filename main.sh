@@ -4,7 +4,7 @@ set -ex
 ## Directory settings
 dos_program_dir=$(pwd)
 echo ----- stage: show envs upload as an artifcat ---- 
-cat env-artifact-local.sh
+cat env-artifact.sh
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
 # setup Envs here so that generate-exec-files.sh can be used individually
 # accounts=( "$ACCOUNTS" )
