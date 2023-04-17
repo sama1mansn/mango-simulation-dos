@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 function read_machines() {
     ip_file=instance_ip.out
     name_file=instance_name.out
@@ -23,8 +24,6 @@ download_file() {
 upload_file() {
 	gsutil cp  "$1" "$2"
 }
-
-download_file "$ENV_ARTIFACT" "$HOME"
 
 function get_testnet_ver() {
     local ret

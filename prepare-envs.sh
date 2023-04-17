@@ -30,11 +30,11 @@ echo ----- stage: checkout buildkite Steps Env ------
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
 [[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
-download_file gs://mango-simulation-private/dos-metrics-env.sh ./
+download_file 'gs://mango-simulation-private/dos-metrics-env.sh' ./
 [[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
 
 echo ----- stage: prepare ssh key to dynamic clients ------
-download_file gs://mango-simulation-private/id_ed25519_dos_test ./
+download_file 'gs://mango-simulation-private/id_ed25519_dos_test' ./
 [[ ! -f "id_ed25519_dos_test" ]]&& echo "no id_ed25519_dos_test found" && exit 1
 chmod 600 id_ed25519_dos_test
 
