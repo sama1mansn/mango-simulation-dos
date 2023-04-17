@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
 ## env
 set -ex
+## fiunctions
+download_file() {
+	for retry in 0 1
+	do
+		if [[ $retry -gt 1 ]];then
+			break
+		fi
+		gsutil cp "$1" "$2"
+		if [[ ! -f "$1" ]];then
+			echo "NO "$1" found, retry"
+		else
+			break
+		fi
+	done
+}
+upload_file() {
+	gsutil cp  "$1" "$2"
+}
+
 ## Download key files from gsutil
 if [[ "$1" != "true" && "$1" != "false" ]];then 
 	BUILD_MANGO_SIMULATOR=false
@@ -9,13 +28,13 @@ else
 fi
 [[ ! "$2" ]]&& echo "No ENV_ARTIFACT" && exit 1
 # shellcheck source=/dev/null
-source utils.sh
+
 download_file "$2" "$HOME"
 sleep 5
 [[ ! -f "env-artifact.sh" ]] && echo no "env-artifact.sh" downloaded && exit 2
 # shellcheck source=/dev/null
-source .profile
-source env-artifact.sh
+source $HOME/.profile
+source $HOME/env-artifact.sh
 
 ## preventing lock-file build fail, 
 ## also need to disable software upgrade in image
@@ -42,14 +61,14 @@ rustup update
 echo ------- stage: download mango-simulation-dos ------
 cd $HOME
 [[ -d "$GIT_REPO_DIR" ]]&& rm -rf $GIT_REPO_DIR
-git clone $GIT_REPO
-git clone $MANGO_CONFIGURE_REPO # may remove later
+git clone "$GIT_REPO"
+git clone "$MANGO_CONFIGURE_REPO" # may remove later
 
 echo ------- stage: build or download mango-simulation ------
 [[ -d "$HOME/$MANGO_SIMULATION_DIR" ]]&& rm -rf "$HOME/$MANGO_SIMULATION_DIR"
 [[ -d "mango-simulation" ]]&& rm -rf mango-simulation #might have lagacy code
 # clone mango_bencher and mkdir dep dir
-git clone $MANGO_SIMULATION_REPO "$HOME/$MANGO_SIMULATION_DIR"
+git clone "$MANGO_SIMULATION_REPO" "$HOME/$MANGO_SIMULATION_DIR"
 cd "$HOME/$MANGO_SIMULATION_DIR"
 if  [[ "$BUILD_MANGO_SIMULATOR" == "true" ]];then
     git checkout "$MANGO_SIMULATION_BRANCH"
@@ -60,7 +79,7 @@ if  [[ "$BUILD_MANGO_SIMULATOR" == "true" ]];then
 else
 	# download from bucket
 	cd $HOME
-	download_file $MANGO_SIMULATION_ARTIFACT $HOME
+	download_file "$MANGO_SIMULATION_ARTIFACT" $HOME
 	[[ ! -f "$HOME/mango-simulation" ]] && echo no mango-simulation downloaded && exit 1
 	chmod +x $HOME/mango-simulation
 fi
