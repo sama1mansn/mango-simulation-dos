@@ -58,17 +58,17 @@ yarn install
 rustup default stable
 rustup update
 
-echo ------- stage: download mango-simulation-dos ------
+echo ------- stage: git clone repos ------
 cd $HOME
 [[ -d "$GIT_REPO_DIR" ]]&& rm -rf $GIT_REPO_DIR
 git clone "$GIT_REPO"
+[[ -d "$HOME/$MANGO_CONFIGURE_DIR" ]]&& rm -rf "$HOME/$MANGO_CONFIGURE_DIR"
 git clone "$MANGO_CONFIGURE_REPO" # may remove later
+[[ -d "$HOME/$MANGO_SIMULATION_DIR" ]]&& rm -rf "$HOME/$MANGO_SIMULATION_DIR"
+git clone "$MANGO_SIMULATION_REPO" "$HOME/$MANGO_SIMULATION_DIR"
 
 echo ------- stage: build or download mango-simulation ------
-[[ -d "$HOME/$MANGO_SIMULATION_DIR" ]]&& rm -rf "$HOME/$MANGO_SIMULATION_DIR"
-[[ -d "mango-simulation" ]]&& rm -rf mango-simulation #might have lagacy code
 # clone mango_bencher and mkdir dep dir
-git clone "$MANGO_SIMULATION_REPO" "$HOME/$MANGO_SIMULATION_DIR"
 cd "$HOME/$MANGO_SIMULATION_DIR"
 if  [[ "$BUILD_MANGO_SIMULATOR" == "true" ]];then
     git checkout "$MANGO_SIMULATION_BRANCH"
@@ -85,14 +85,14 @@ else
 fi
 echo ---- stage: down id, accounts and authority file in HOME ----
 cd $HOME
-download_file $ID_FILE $HOME
+download_file $MANGO_SIMULATION_PRIVATE_GS/$ID_FILE $HOME
 [[ ! -f "$ID_FILE" ]]&&echo no $ID_FILE file && exit 1
-download_file $AUTHORITY_FILE $HOME
+download_file $MANGO_SIMULATION_PRIVATE_GS/$AUTHORITY_FILE $HOME
 [[ ! -f "$AUTHORITY_FILE" ]]&&echo no $AUTHORITY_FILE file && exit 1
 download_accounts=( "$ACCOUNTS" )
 for acct in "${download_accounts[@]}"
 do
-  download_file $acct $HOME
+  download_file $MANGO_SIMULATION_PRIVATE_GS/$acct $HOME
 done
 echo --- stage: Start refunding clients accounts
 cd "$MANGO_CONFIGURE_DIR"

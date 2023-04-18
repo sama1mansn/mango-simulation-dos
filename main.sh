@@ -25,7 +25,7 @@ cd "$dos_program_dir"
 # shellcheck source=/dev/null
 source create-instance.sh
 create_machines "$NUM_CLIENT"
-echo ----- stage: build dependency mango_bencher configure_mango for 1st machine------
+echo ----- stage: build dependency mango_bencher configure_mango for machine------
 client_num=1
 dependency_arg2="gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/env-artifact.sh"
 for sship in "${instance_ip[@]}"
@@ -36,16 +36,16 @@ do
     (( client_num++ )) || true
 done
 
-# echo ----- stage: run dos test ---
-# client_num=1
-# for sship in "${instance_ip[@]}"
-# do
-#     ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < exec-start-dos-test-$client_num.sh)
-#     let client_num=$client_num+1
-#     if [[ $client_num -gt ${#accounts[@]} ]];then
-#         client_num=1
-#     fi 
-# done
+echo ----- stage: run dos test ---
+client_num=1
+for sship in "${instance_ip[@]}"
+do
+    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < exec-start-dos-test-$client_num.sh)
+    let client_num=$client_num+1
+    if [[ $client_num -gt ${#accounts[@]} ]];then
+        client_num=1
+    fi 
+done
 # echo ----- stage: wait for benchmark to end ------
 # sleep 10 # in start-dos-test, after keeper run, the script sleep 10s to wait for keeper ready
 

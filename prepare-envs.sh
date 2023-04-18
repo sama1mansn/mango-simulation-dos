@@ -26,6 +26,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& not found, use default defined in start-build-depency.sh
 [[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found && exit 1
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
+[[ ! "$MANGO_SIMULATION_PRIVATE_GS" ]]&& MANGO_SIMULATION_PRIVATE_GS="gs://mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_GS use $MANGO_SIMULATION_PRIVATE_GS
 
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
@@ -60,6 +61,7 @@ echo "MANGO_CONFIGURE_DIR=$MANGO_CONFIGURE_DIR" >> env-artifact.sh
 echo "GIT_TOKEN=$GIT_TOKEN" >> env-artifact.sh
 echo "GIT_REPO=$GIT_REPO" >> env-artifact.sh
 echo "GIT_REPO_DIR=$GIT_REPO_DIR" >> env-artifact.sh
+echo "MANGO_SIMULATION_PRIVATE_GS=$MANGO_SIMULATION_PRIVATE_GS" >> env-artifact.sh
 echo "NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "AVAILABLE_ZONE=\"$AVAILABLE_ZONE\"" >> env-artifact.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
