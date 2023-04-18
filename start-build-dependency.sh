@@ -85,14 +85,14 @@ else
 fi
 echo ---- stage: down id, accounts and authority file in HOME ----
 cd $HOME
-download_file $ID_FILE
+download_file $ID_FILE $HOME
 [[ ! -f "$ID_FILE" ]]&&echo no $ID_FILE file && exit 1
-download_file $AUTHORITY_FILE
+download_file $AUTHORITY_FILE $HOME
 [[ ! -f "$AUTHORITY_FILE" ]]&&echo no $AUTHORITY_FILE file && exit 1
 download_accounts=( "$ACCOUNTS" )
 for acct in "${download_accounts[@]}"
 do
-  download_file $acct
+  download_file $acct $HOME
 done
 echo --- stage: Start refunding clients accounts
 cd "$MANGO_CONFIGURE_DIR"
