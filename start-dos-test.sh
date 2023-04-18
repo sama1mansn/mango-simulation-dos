@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -ex
+
+# shellcheck source=/dev/null
+source $HOME/.profile
+# shellcheck source=/dev/null
+source $HOME/env-artifact.sh
+
 source $HOME/dos-metrics-env.sh
 #############################
 [[ ! "$CLUSTER" ]] && echo no CLUSTER && exit 1
@@ -18,8 +24,6 @@ source $HOME/dos-metrics-env.sh
 echo SOLANA_METRICS_CONFIG=\"$SOLANA_METRICS_CONFIG\" >> dos-env.out
 #### keeper ENV ####
 export CLUSTER=$CLUSTER
-
-
 
 
 download_file() {
