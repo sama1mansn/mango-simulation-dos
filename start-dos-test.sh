@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 set -ex
-
 # shellcheck source=/dev/null
 source $HOME/.profile
 # shellcheck source=/dev/null
 source $HOME/env-artifact.sh
-
-source $HOME/dos-metrics-env.sh
 #############################
 [[ ! "$CLUSTER" ]] && echo no CLUSTER && exit 1
 [[ ! "$SOLANA_METRICS_CONFIG" ]] && echo no SOLANA_METRICS_CONFIG ENV && exit 1
-[[ ! "$BUILD_DEPENDENCY_CONFIGURE_DIR" ]] && echo no BUILD_DEPENDENCY_CONFIGURE_DIR ENV && exit 1
 [[ ! "$RUST_LOG" ]] && export RUST_LOG=info
 [[ ! "$DURATION" ]] && echo no DURATION && exit 1
 [[ ! "$QOUTES_PER_SECOND" ]] && echo no QOUTES_PER_SECOND && exit 1
@@ -21,33 +17,47 @@ source $HOME/dos-metrics-env.sh
 [[ ! "$ACCOUNT_FILE" ]]&&echo no ACCOUNT_FILE && exit 1
 
 #### metrics env ####
-echo SOLANA_METRICS_CONFIG=\"$SOLANA_METRICS_CONFIG\" >> dos-env.out
+
+configureMetrics() {
+  [[ -n $SOLANA_METRICS_CONFIG ]] || return 0
+
+  declare metricsParams
+  IFS=',' read -r -a metricsParams <<< "$SOLANA_METRICS_CONFIG"
+  for param in "${metricsParams[@]}"; do
+    IFS='=' read -r -a pair <<< "$param"
+    if [[ ${#pair[@]} != 2 ]]; then
+      echo Error: invalid metrics parameter: "$param" >&2
+    else
+      declare name="${pair[0]}"
+      declare value="${pair[1]}"
+      case "$name" in
+      host)
+        export INFLUX_HOST="$value"
+        echo INFLUX_HOST="$INFLUX_HOST" >&2
+        ;;
+      db)
+        export INFLUX_DATABASE="$value"
+        echo INFLUX_DATABASE="$INFLUX_DATABASE" >&2
+        ;;
+      u)
+        export INFLUX_USERNAME="$value"
+        echo INFLUX_USERNAME="$INFLUX_USERNAME" >&2
+        ;;
+      p)
+        export INFLUX_PASSWORD="$value"
+        echo INFLUX_PASSWORD="********" >&2
+        ;;
+      *)
+        echo Error: Unknown metrics parameter name: "$name" >&2
+        ;;
+      esac
+    fi
+  done
+}
 #### keeper ENV ####
 export CLUSTER=$CLUSTER
-
-
-download_file() {
-	for retry in 0 1
-	do
-		if [[ $retry -gt 1 ]];then
-			break
-		fi
-		gsutil cp  gs://mango_bencher-dos/$1 ./
-		if [[ ! -f "$1" ]];then
-			echo "NO $1 found, retry"
-            sleep 5
-		else
-			break
-		fi
-	done
-}
-
 ## Prepare Metrics Env
-cd $HOME
-
-ret_config_metric=$(exec ./configure-metrics.sh || true )
-echo ret_config_metric=$ret_config_metric
-
+configureMetrics
 ## Prepare Log Directory
 if [[ ! -d "$HOME/$HOSTNAME" ]];then
 	mkdir $HOME/$HOSTNAME
@@ -58,21 +68,12 @@ fi
 
 sleep 10
 
-echo --- stage: Run Solana-bench-mango -----
-#### mango_bencher ENV printout for checking ####
-[[ ! "$DURATION" ]] &&  DURATION=120 && echo DURATION=$DURATION >> dos-env.out
-[[ ! "$QOUTES_PER_SECOND" ]] &&  QOUTES_PER_SECOND=1 && echo QOUTES_PER_SECOND=$QOUTES_PER_SECOND >> dos-env.out
-[[ ! "$CLUSTER" ]] &&  CLUSTER="mainnet-beta" && echo CLUSTER=$CLUSTER >> dos-env.out
-[[ ! "$ENDPOINT" ]] &&  ENDPOINT="https://api.mainnet-beta.solana.com" && echo ENDPOINT=$ENDPOINT >> dos-env.out
-[[ ! "$AUTHORITY_FILE" ]] &&  AUTHORITY_FILE="authority.json" && echo AUTHORITY_FILE=$AUTHORITY_FILE >> dos-env.out
-[[ ! "$ACCOUNT_FILE" ]] &&  ACCOUNT_FILE="account.json" && echo ACCOUNT_FILE=$ACCOUNT_FILE >> dos-env.out
-[[ ! "$ID_FILE" ]] &&  ID_FILE="id.json" && echo ID_FILE=$ID_FILE >> dos-env.out
-
+echo --- stage: Run Solana-simulation -----
 # benchmark exec in $HOME Directory
 cd $HOME
 b_cluster_ep=$ENDPOINT
 b_auth_f="$HOME/$AUTHORITY_FILE"
-b_acct_f="$HOME/$ACCOUNT_FILE"
+b_acct_f="$HOME/$1"
 b_id_f="$HOME/$ID_FILE"
 b_mango_cluster=$CLUSTER
 b_duration=$DURATION
@@ -107,8 +108,3 @@ echo --- write down log in log-files.out ---
 echo "${b_tx_save_f}.tar.gz" > $HOME/log-files.out
 echo $b_block_save_f >> $HOME/log-files.out
 echo $b_error_f >> $HOME/log-files.out
-
-## mango-simulation -- -u ${NET_OR_IP} --identity ../configure_mango/authority.json 
-## --accounts ../configure_mango/accounts-20.json  --mango ../configure_mango/ids.json 
-## --mango-cluster ${IP_OF_MANGO_CLIENT} --duration 60 -q 128 --transaction-save-file tlog.csv 
-## --block_data_save_file blog.csv  2> err.txt &

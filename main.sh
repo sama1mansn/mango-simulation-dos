@@ -40,11 +40,14 @@ echo ----- stage: run dos test ---
 client_num=1
 for sship in "${instance_ip[@]}"
 do
-    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < exec-start-dos-test-$client_num.sh)
-    let client_num=$client_num+1
+    (( idx=$client_num -1 )) || true
+    [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
+    [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
+    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh accounts[$idx])
+    (( client_num++ )) || true
     if [[ $client_num -gt ${#accounts[@]} ]];then
         client_num=1
-    fi 
+    fi
 done
 # echo ----- stage: wait for benchmark to end ------
 # sleep 10 # in start-dos-test, after keeper run, the script sleep 10s to wait for keeper ready
