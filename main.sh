@@ -43,7 +43,8 @@ do
     (( idx=$client_num -1 )) || true
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
     [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
-    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh accounts[$idx])
+    acct=accounts[$idx]
+    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh $acct)
     (( client_num++ )) || true
     if [[ $client_num -gt ${#accounts[@]} ]];then
         client_num=1
