@@ -60,6 +60,7 @@ echo ------- stage: git clone repos ------
 cd $HOME
 [[ -d "$GIT_REPO_DIR" ]]&& rm -rf $GIT_REPO_DIR
 git clone "$GIT_REPO"
+cp "$HOME/$GIT_REPO_DIR/start-dos-test.sh" /home/sol/start-dos-test.sh
 [[ -d "$HOME/$MANGO_CONFIGURE_DIR" ]]&& rm -rf "$HOME/$MANGO_CONFIGURE_DIR"
 git clone "$MANGO_CONFIGURE_REPO" # may remove later
 [[ -d "$HOME/$MANGO_SIMULATION_DIR" ]]&& rm -rf "$HOME/$MANGO_SIMULATION_DIR"

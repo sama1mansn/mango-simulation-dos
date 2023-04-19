@@ -44,12 +44,27 @@ do
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
     [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
     acct=accounts[$idx]
-    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh $acct)
+    # ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh $acct)
+    ret_run_dos=$(ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship "nohup /home/sol/start-dos-test.sh $acct 1> start-dos-test.nohup 2> start-dos-test.nohup &")
     (( client_num++ )) || true
-    if [[ $client_num -gt ${#accounts[@]} ]];then
-        client_num=1
-    fi
+    [[ $client_num -gt ${#accounts[@]} ]] && client_num=1
+    
 done
+echo ----- stage: check finish of process ---
+sleep 5
+for sship in "${instance_ip[@]}"
+do
+    ret_pid=$(ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt)
+    pid=$(cat pid.txt)
+    [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
+    while [ "$pid" != "" ]
+    do
+        sleep 3
+        ret_pid=$(ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
+        [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
+    done
+done
+
 # echo ----- stage: wait for benchmark to end ------
 # sleep 10 # in start-dos-test, after keeper run, the script sleep 10s to wait for keeper ready
 
