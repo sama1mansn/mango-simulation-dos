@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+## start-build-dependency.sh  
+## arg 1: wheather to build solana-mango-simulator
+## arg 2: ARTIFACT BUCKET
+## arg 3: NAME OF ENV ARTIFACT FILE
 ## env
 set -ex
 ## fiunctions
