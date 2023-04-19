@@ -8,17 +8,19 @@ function read_machines() {
 
 ## provide filename in bucket
 download_file() {
-	for retry in 0 1
+	for retry in 0 1 2
 	do
-		if [[ $retry -gt 1 ]];then
+		if [[ $retry -gt 2 ]];then
 			break
 		fi
 		gsutil cp "$1" "$2"
 		if [[ ! -f "$1" ]];then
-			echo "NO "$1" found, retry"
+			echo NO "$1" found, retry
 		else
+            echo "$1" dowloaded
 			break
 		fi
+        sleep 5
 	done
 }
 upload_file() {

@@ -89,14 +89,15 @@ mkdir -p "$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME"
 
 echo ---- stage: download id, accounts and authority file in HOME ----
 cd $HOME
-download_file $MANGO_SIMULATION_PRIVATE_GS/$ID_FILE $HOME
-[[ ! -f "$ID_FILE" ]]&&echo no $ID_FILE file && exit 1
-download_file $MANGO_SIMULATION_PRIVATE_GS/$AUTHORITY_FILE $HOME
-[[ ! -f "$AUTHORITY_FILE" ]]&&echo no $AUTHORITY_FILE file && exit 1
+download_file "$MANGO_SIMULATION_PRIVATE_GS/$ID_FILE" "$HOME"
+[[ ! -f "$ID_FILE" ]]&&echo no "$ID_FILE" file && exit 1
+download_file "$MANGO_SIMULATION_PRIVATE_GS/$AUTHORITY_FILE" "$HOME"
+[[ ! -f "$AUTHORITY_FILE" ]]&&echo no "$AUTHORITY_FILE" file && exit 1
 download_accounts=( "$ACCOUNTS" )
 for acct in "${download_accounts[@]}"
 do
-  download_file $MANGO_SIMULATION_PRIVATE_GS/$acct $HOME
+  download_file "$MANGO_SIMULATION_PRIVATE_GS/$acct" "$HOME"
+  [[ -f "$HOME/$acct" ]] || echo no "$acct" file && exit 1 || echo "$acct" downloaded
 done
 
 echo --- stage: Start refunding clients accounts
