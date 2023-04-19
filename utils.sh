@@ -7,17 +7,18 @@ function read_machines() {
 }
 
 ## provide filename in bucket
+## s1: bucket name s2: file name s3: local directory
 download_file() {
 	for retry in 0 1 2
 	do
 		if [[ $retry -gt 2 ]];then
 			break
 		fi
-		gsutil cp "$1" "$2"
-		if [[ ! -f "$1" ]];then
-			echo NO "$1" found, retry
+		gsutil cp "$1/$2" "$3"
+		if [[ ! -f "$2" ]];then
+			echo NO "$2" found, retry
 		else
-            echo "$1" dowloaded
+            echo "$2" dowloaded
 			break
 		fi
         sleep 5

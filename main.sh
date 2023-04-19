@@ -27,7 +27,7 @@ source create-instance.sh
 create_machines "$NUM_CLIENT"
 echo ----- stage: build dependency mango_bencher configure_mango for machine------
 client_num=1
-dependency_arg2="gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/env-artifact.sh"
+dependency_arg2="$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
 for sship in "${instance_ip[@]}"
 do
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false

@@ -2,20 +2,24 @@
 ## env
 set -ex
 ## fiunctions
+## s1: bucket name s2: file name s3: local directory
 download_file() {
-	for retry in 0 1
+	for retry in 0 1 2
 	do
-		if [[ $retry -gt 1 ]];then
+		if [[ $retry -gt 2 ]];then
 			break
 		fi
-		gsutil cp "$1" "$2"
-		if [[ ! -f "$1" ]];then
-			echo "NO "$1" found, retry"
+		gsutil cp "$1/$2" "$3"
+		if [[ ! -f "$2" ]];then
+			echo NO "$2" found, retry
 		else
+            echo "$2" dowloaded
 			break
 		fi
+        sleep 5
 	done
 }
+# s1: local file s2: bucket name
 upload_file() {
 	gsutil cp  "$1" "$2"
 }
@@ -26,8 +30,8 @@ if [[ "$1" != "true" && "$1" != "false" ]];then
 else
 	BUILD_MANGO_SIMULATOR=$1
 fi
-[[ ! "$2" ]]&& echo "No ENV_ARTIFACT" && exit 1
-download_file "$2" "$HOME"
+[[ ! "$2" ]]&& echo "No ENV_ARTIFACT_GS" && exit 1
+download_file "gs://$2" "$ENV_ARTIFACT_FILE" "$HOME"
 sleep 5
 [[ ! -f "env-artifact.sh" ]] && echo no "env-artifact.sh" downloaded && exit 2
 # shellcheck source=/dev/null
@@ -73,11 +77,11 @@ if  [[ "$BUILD_MANGO_SIMULATOR" == "true" ]];then
 	cargo build --release
 	cp "$HOME/$MANGO_SIMULATION_DIR/target/release/mango-simulation" $HOME
 	chmod +x $HOME/mango-simulation
-	upload_file $HOME/mango-simulation "$MANGO_SIMULATION_ARTIFACT"
+	upload_file $HOME/mango-simulation "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET/$MANGO_SIMULATION_ARTIFACT_FILE"
 else
 	# download from bucket
 	cd $HOME
-	download_file "$MANGO_SIMULATION_ARTIFACT" $HOME
+	download_file "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET" "$MANGO_SIMULATION_ARTIFACT_FILE" "$HOME"
 	[[ ! -f "$HOME/mango-simulation" ]] && echo no mango-simulation downloaded && exit 1
 	chmod +x $HOME/mango-simulation
 fi
@@ -90,14 +94,14 @@ mkdir -p "$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME"
 
 echo ---- stage: download id, accounts and authority file in HOME ----
 cd $HOME
-download_file "$MANGO_SIMULATION_PRIVATE_GS/$ID_FILE" "$HOME"
+download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET/$ID_FILE" "$HOME"
 [[ ! -f "$ID_FILE" ]]&&echo no "$ID_FILE" file && exit 1
-download_file "$MANGO_SIMULATION_PRIVATE_GS/$AUTHORITY_FILE" "$HOME"
+download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET/$AUTHORITY_FILE" "$HOME"
 [[ ! -f "$AUTHORITY_FILE" ]]&&echo no "$AUTHORITY_FILE" file && exit 1
-download_accounts=( "$ACCOUNTS" )
+download_accounts=( $ACCOUNTS )
 for acct in "${download_accounts[@]}"
 do
-  download_file "$MANGO_SIMULATION_PRIVATE_GS/$acct" "$HOME"
+  download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET/$acct" "$HOME"
   [[ -f "$HOME/$acct" ]] || echo no "$acct" file && exit 1 || echo "$acct" downloaded
 done
 

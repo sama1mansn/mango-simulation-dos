@@ -24,19 +24,18 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$GIT_REPO_DIR" ]]&& GIT_REPO_DIR="mango-simulation-dos" && GIT_REPO_DIR not found, use $GIT_REPO_DIR
 [[ ! "$NUM_CLIENT" || $NUM_CLIENT -eq 0 ]]&& echo NUM_CLIENT env invalid && exit 1
 [[ ! "$AVAILABLE_ZONE" ]]&& echo AVAILABLE_ZONE env not found && exit 1
-[[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& not found, use default defined in start-build-depency.sh
 [[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found && exit 1
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
-[[ ! "$MANGO_SIMULATION_PRIVATE_GS" ]]&& MANGO_SIMULATION_PRIVATE_GS="gs://mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_GS use $MANGO_SIMULATION_PRIVATE_GS
+[[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& MANGO_SIMULATION_PRIVATE_BUCKET="mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_BUCKET use $MANGO_SIMULATION_PRIVATE_BUCKET
 
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
 [[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
-download_file "$MANGO_SIMULATION_PRIVATE_GS/dos-metrics-env.sh" ./
+download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" dos-metrics-env.sh ./
 [[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
 
 echo ----- stage: prepare ssh key to dynamic clients ------
-download_file "$MANGO_SIMULATION_PRIVATE_GS/id_ed25519_dos_test" ./
+download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" id_ed25519_dos_test ./
 [[ ! -f "id_ed25519_dos_test" ]]&& echo "no id_ed25519_dos_test found" && exit 1
 chmod 600 id_ed25519_dos_test
 
@@ -62,7 +61,7 @@ echo "MANGO_CONFIGURE_DIR=$MANGO_CONFIGURE_DIR" >> env-artifact.sh
 echo "GIT_TOKEN=$GIT_TOKEN" >> env-artifact.sh
 echo "GIT_REPO=$GIT_REPO" >> env-artifact.sh
 echo "GIT_REPO_DIR=$GIT_REPO_DIR" >> env-artifact.sh
-echo "MANGO_SIMULATION_PRIVATE_GS=$MANGO_SIMULATION_PRIVATE_GS" >> env-artifact.sh
+echo "MANGO_SIMULATION_PRIVATE_BUCKET=$MANGO_SIMULATION_PRIVATE_BUCKET" >> env-artifact.sh
 echo "NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "AVAILABLE_ZONE=\"$AVAILABLE_ZONE\"" >> env-artifact.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
@@ -72,7 +71,9 @@ echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
 echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
 ## artifact address
-echo "ENV_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/env-artifact.sh" >> env-artifact.sh
-echo "MANGO_SIMULATION_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/mango-simulation" >> env-artifact.sh
+echo "ENV_ARTIFACT_BUCKET=buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
+echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
+echo "MANGO_SIMULATION_ARTIFACT_BUCKET=buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
+echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
