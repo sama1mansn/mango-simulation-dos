@@ -27,12 +27,13 @@ source create-instance.sh
 create_machines "$NUM_CLIENT"
 echo ----- stage: build dependency mango_bencher configure_mango for machine------
 client_num=1
-dependency_arg2="$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
+arg2="$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
+arg3="$ENV_ARTIFACT_FILE"
 for sship in "${instance_ip[@]}"
 do
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
     [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
-    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh $dependency_arg1 $dependency_arg2)
+    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh $arg1 $arg2 $arg3)
     (( client_num++ )) || true
 done
 

@@ -31,7 +31,7 @@ else
 	BUILD_MANGO_SIMULATOR=$1
 fi
 [[ ! "$2" ]]&& echo "No ENV_ARTIFACT_GS" && exit 1
-download_file "gs://$2" "$ENV_ARTIFACT_FILE" "$HOME"
+download_file "gs://$2" "$3" "$HOME"
 sleep 5
 [[ ! -f "env-artifact.sh" ]] && echo no "env-artifact.sh" downloaded && exit 2
 # shellcheck source=/dev/null
