@@ -27,6 +27,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found && exit 1
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
 [[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& MANGO_SIMULATION_PRIVATE_BUCKET="mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_BUCKET use $MANGO_SIMULATION_PRIVATE_BUCKET
+[[ ! "$ARTIFACT_BUCKET" ]]&& ARTIFACT_BUCKET="buildkite-dos-agent" && no MANGO_SIMULATION_PRIVATE_BUCKET use $ARTIFACT_BUCKET
 
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
@@ -71,9 +72,9 @@ echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
 echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
 ## artifact address
-echo "ENV_ARTIFACT_BUCKET=buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
+echo "ENV_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
 echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
-echo "MANGO_SIMULATION_ARTIFACT_BUCKET=buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
+echo "MANGO_SIMULATION_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
