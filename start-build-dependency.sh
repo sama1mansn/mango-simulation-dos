@@ -60,7 +60,6 @@ echo ------- stage: git clone repos ------
 cd $HOME
 [[ -d "$GIT_REPO_DIR" ]]&& rm -rf $GIT_REPO_DIR
 git clone "$GIT_REPO"
-cp "$HOME/$GIT_REPO_DIR/start-dos-test.sh" /home/sol/start-dos-test.sh
 [[ -d "$HOME/$MANGO_CONFIGURE_DIR" ]]&& rm -rf "$HOME/$MANGO_CONFIGURE_DIR"
 git clone "$MANGO_CONFIGURE_REPO" # may remove later
 [[ -d "$HOME/$MANGO_SIMULATION_DIR" ]]&& rm -rf "$HOME/$MANGO_SIMULATION_DIR"
@@ -82,7 +81,13 @@ else
 	[[ ! -f "$HOME/mango-simulation" ]] && echo no mango-simulation downloaded && exit 1
 	chmod +x $HOME/mango-simulation
 fi
-echo ---- stage: down id, accounts and authority file in HOME ----
+echo ---- stage: copy files to HOME and mkdir log folder ----
+cp "$HOME/$GIT_REPO_DIR/start-dos-test.sh" /home/sol/start-dos-test.sh
+cp "$HOME/$GIT_REPO_DIR/start-upload-logs.sh" /home/sol/start-upload-logs.sh
+[[ -d "$HOME/$BUILDKITE_BUILD_ID" ]] && rm -rf "$HOME/$BUILDKITE_BUILD_ID"
+mkdir -p "$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME"
+
+echo ---- stage: download id, accounts and authority file in HOME ----
 cd $HOME
 download_file $MANGO_SIMULATION_PRIVATE_GS/$ID_FILE $HOME
 [[ ! -f "$ID_FILE" ]]&&echo no $ID_FILE file && exit 1
@@ -93,6 +98,7 @@ for acct in "${download_accounts[@]}"
 do
   download_file $MANGO_SIMULATION_PRIVATE_GS/$acct $HOME
 done
+
 echo --- stage: Start refunding clients accounts
 cd "$MANGO_CONFIGURE_DIR"
 for acct in "${download_accounts[@]}"

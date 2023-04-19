@@ -77,9 +77,10 @@ b_id_f="$HOME/$ID_FILE"
 b_mango_cluster=$CLUSTER
 b_duration=$DURATION
 b_q=$QOUTES_PER_SECOND
-b_tx_save_f="$HOME/$HOSTNAME/TLOG.csv"
-b_block_save_f="$HOME/$HOSTNAME/BLOCK.csv"
-b_error_f="$HOME/$HOSTNAME/error.txt"
+b_tx_save_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/TLOG.csv"
+b_block_save_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/BLOCK.csv"
+b_error_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/error.txt"
+
 echo $(pwd)
 echo --- start of benchmark $(date)
 

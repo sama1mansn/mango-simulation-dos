@@ -45,12 +45,17 @@ do
     [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
     [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
     acct=accounts[$idx]
+    echo acct=$acct
     # ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh $acct)
     ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship "nohup /home/sol/start-dos-test.sh $acct 1> start-dos-test.nohup 2> start-dos-test.nohup &")
     (( client_num++ )) || true
     [[ $client_num -gt ${#accounts[@]} ]] && client_num=1
     
 done
+# # Get Time Start
+start_time=$(date -u +%s)
+start_time_adjust=$(get_time_after $start_time 5)
+
 echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
@@ -66,22 +71,18 @@ do
     done
 done
 
-# echo ----- stage: wait for benchmark to end ------
-# sleep 10 # in start-dos-test, after keeper run, the script sleep 10s to wait for keeper ready
 
-# # Get Time Start
-# start_time=$(echo `date -u +%s`)
-# get_time_after $start_time 5
-# start_time_adjust=$outcom_in_sec
-# sleep $DURATION
 
-# sleep_time=$(echo "$DURATION+2" | bc)
-# sleep $sleep_time
+echo ----- stage: upload logs ------
+for sship in "${instance_ip[@]}"
+do
+    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh)
+done
+
+
 # ### Get Time Stop
-# stop_time=$(echo `date -u +%s`)
-# get_time_before $stop_time 5
-# stop_time_adjust=$outcom_in_sec
-
+# stop_time=$(date -u +%s)
+# stop_time_adjust=$(get_time_before $stop_time 5)
 # echo ----- stage: DOS report ------
 # get_testnet_ver
 # ## PASS ENV
