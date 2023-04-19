@@ -14,10 +14,9 @@ source $HOME/env-artifact.sh
 [[ ! "$RUN_KEEPER" ]] && RUN_KEEPER="true" >> dos-env.out
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
-[[ ! "$ACCOUNT_FILE" ]]&&echo no ACCOUNT_FILE && exit 1
+[[ ! "$1" ]]&& echo no ACCOUNT_FILE && exit 1 || ACCOUNT_FILE="$1"
 
 #### metrics env ####
-
 configureMetrics() {
   [[ -n $SOLANA_METRICS_CONFIG ]] || return 0
 
@@ -73,7 +72,7 @@ echo --- stage: Run Solana-simulation -----
 cd $HOME
 b_cluster_ep=$ENDPOINT
 b_auth_f="$HOME/$AUTHORITY_FILE"
-b_acct_f="$HOME/$1"
+b_acct_f="$HOME/$ACCOUNT_FILE"
 b_id_f="$HOME/$ID_FILE"
 b_mango_cluster=$CLUSTER
 b_duration=$DURATION
