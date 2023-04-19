@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+## start-dos-test.sh
+## arg1: account file to use
+## arg2: RUN_KEEPER
 set -ex
 # shellcheck source=/dev/null
 source $HOME/.profile
@@ -11,10 +14,11 @@ source $HOME/env-artifact.sh
 [[ ! "$DURATION" ]] && echo no DURATION && exit 1
 [[ ! "$QOUTES_PER_SECOND" ]] && echo no QOUTES_PER_SECOND && exit 1
 [[ ! "$ENDPOINT" ]]&& echo "No ENDPOINT" > dos-env.out && exit 1
-[[ ! "$RUN_KEEPER" ]] && RUN_KEEPER="true" >> dos-env.out
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
-[[ ! "$1" ]]&& echo no ACCOUNT_FILE && exit 1 || ACCOUNT_FILE="$1"
+[[ ! "$1" ]]&& echo no ACCOUNT_FILE as arg1 && exit 1 || ACCOUNT_FILE="$1"
+[[ ! "$2" ]]&& echo no NO RUN_KEEPER as arg2 && exit 1 || RUN_KEEPER="\"$2\""
+
 
 #### metrics env ####
 configureMetrics() {

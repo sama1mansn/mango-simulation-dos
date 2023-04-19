@@ -4,7 +4,7 @@ set -ex
 ## Directory settings
 dos_program_dir=$(pwd)
 echo ----- stage: show envs upload as an artifcat ---- 
-cat env-artifact.sh
+source env-artifact.sh
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
 # setup Envs here so that generate-exec-files.sh can be used individually
 # accounts=( "$ACCOUNTS" )
@@ -31,9 +31,10 @@ arg2="$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
 arg3="$ENV_ARTIFACT_FILE"
 for sship in "${instance_ip[@]}"
 do
-    [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
-    [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
-    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh $arg1 $arg2 $arg3)
+    [[ $client_num -eq 1 ]] && arg1=true || arg1=false
+    [[ $BUILD_MANGO_SIMULATOR != "true" ]] && arg1=false # override the arg1 base on input from Steps
+    # run start-build-dependency.sh which in agent machine
+    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh "$arg1" "$arg2" "$arg3")
     (( client_num++ )) || true
 done
 
@@ -43,15 +44,14 @@ client_num=1
 for sship in "${instance_ip[@]}"
 do
     (( idx=$client_num -1 )) || true
-    [[ $client_num -eq 1 ]] && dependency_arg1=true || dependency_arg1=false
-    [[ $RUN_KEEPER != "true" ]] && dependency_arg1=false # override the dependency_arg1 base on input from Steps
+    [[ $client_num -eq 1 ]] && arg2=true || arg2=false
+    [[ $RUN_KEEPER != "true" ]] && arg2=false # override the arg2 base on input from Steps
     acct=accounts[$idx]
     echo acct=$acct
-    # ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-dos-test.sh $acct)
-    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship "nohup /home/sol/start-dos-test.sh $acct 1> start-dos-test.nohup 2> start-dos-test.nohup &")
+    # run start-dos-test.sh which in client machine
+    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship "nohup /home/sol/start-dos-test.sh $acct $arg2 1> start-dos-test.nohup 2> start-dos-test.nohup &")
     (( client_num++ )) || true
-    [[ $client_num -gt ${#accounts[@]} ]] && client_num=1
-    
+    [[ $client_num -gt ${#accounts[@]} ]] && client_num=1    
 done
 # # Get Time Start
 start_time=$(date -u +%s)
