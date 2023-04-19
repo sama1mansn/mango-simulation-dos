@@ -21,6 +21,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 ## CI program ENVS
 [[ ! "$GIT_TOKEN" ]]&& echo GIT_TOKEN env not found && exit 1
 [[ ! "$GIT_REPO" ]]&& GIT_REPO=$BUILDKITE_REPO && GIT_REPO not found, use $GIT_REPO
+[[ ! "$GIT_REPO_DIR" ]]&& GIT_REPO_DIR="mango-simulation-dos" && GIT_REPO_DIR not found, use $GIT_REPO_DIR
 [[ ! "$NUM_CLIENT" || $NUM_CLIENT -eq 0 ]]&& echo NUM_CLIENT env invalid && exit 1
 [[ ! "$AVAILABLE_ZONE" ]]&& echo AVAILABLE_ZONE env not found && exit 1
 [[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& not found, use default defined in start-build-depency.sh
@@ -66,7 +67,10 @@ echo "NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "AVAILABLE_ZONE=\"$AVAILABLE_ZONE\"" >> env-artifact.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
 echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
-## Metric Env
+# buildkite build envs
+echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
+echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
+echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
 ## artifact address
 echo "ENV_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/env-artifact.sh" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT=gs://buildkite-dos-agent/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/mango-simulation" >> env-artifact.sh
