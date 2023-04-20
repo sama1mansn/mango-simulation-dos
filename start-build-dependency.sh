@@ -107,7 +107,7 @@ download_accounts=( $ACCOUNTS )
 for acct in "${download_accounts[@]}"
 do
   download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" "$acct" "$HOME"
-  [[ -f "$HOME/$acct" ]] || echo no "$acct" file && exit 1 || echo "$acct" downloaded
+  [[ -f "$acct" ]]&& echo no "$acct" file && exit 1 || echo "$acct" downloaded
 done
 
 echo --- stage: Start refunding clients accounts
