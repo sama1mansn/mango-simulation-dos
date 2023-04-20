@@ -30,9 +30,9 @@ upload_file() {
 
 ## Download key files from gsutil
 if [[ "$1" != "true" && "$1" != "false" ]];then 
-	BUILD_MANGO_SIMULATOR=false
+	BUILD_MANGO_SIMULATOR="false"
 else
-	BUILD_MANGO_SIMULATOR=$1
+	BUILD_MANGO_SIMULATOR="$1"
 fi
 [[ ! "$2" ]]&& echo "No artifact bucket" && exit 1
 [[ ! "$3" ]]&& echo "No artifact filename" && exit 1

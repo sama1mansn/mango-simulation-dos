@@ -27,7 +27,7 @@ source create-instance.sh
 create_machines "$NUM_CLIENT"
 echo ----- stage: build dependency mango_bencher configure_mango for machine------
 client_num=1
-arg2="$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
+arg2="$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID"
 arg3="$ENV_ARTIFACT_FILE"
 for sship in "${instance_ip[@]}"
 do
