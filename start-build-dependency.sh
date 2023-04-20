@@ -111,7 +111,7 @@ do
 done
 
 echo --- stage: Start refunding clients accounts
-cd "$MANGO_CONFIGURE_DIR"I
+cd "$MANGO_CONFIGURE_DIR"
 for acct in "${download_accounts[@]}"
 do
   ts-node refund_users.ts "${HOME}/$acct" > out.log 2>1 || true
