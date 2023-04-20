@@ -58,12 +58,13 @@ do
         [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     done
 done
+estimate_stop_time=$(get_time_after $star_time $DURATION)
 
 ### Get Time Stop
 stop_time=$(date -u +%s)
 stop_time_adjust=$(get_time_before $stop_time 5)
 echo ----- stage: DOS report ------
-testnet_version=get_testnet_ver
+testnet_version=$(get_testnet_ver $ENDPOINT)
 # ## PASS ENV
 [[ $SLACK_WEBHOOK ]]&&echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" > dos-report-env.sh
 [[ $DISCORD_WEBHOOK ]]&&echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> dos-report-env.sh

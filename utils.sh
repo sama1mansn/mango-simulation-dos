@@ -35,7 +35,7 @@ function get_testnet_ver() {
         if [[ $retry -gt 1 ]];then
             break
         fi
-        ret=$(curl $ENDPOINT -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getVersion"}
+        ret=$(curl $1 -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getVersion"}
         ' | jq '.result."solana-core"' | sed 's/\"//g') || true
         echo get_testnet_ver ret: $ret
         if [[ $ret =~ [0-9]+.[0-9]+.[0-9]+ ]];then
