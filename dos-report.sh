@@ -29,7 +29,6 @@ fi
 cluster_version=$CLUSTER_VERSION
 num_clients=$NUM_CLIENT
 duration=$DURATION
-instances=$INSTANCES
 qoutes_per_second=$QOUTES_PER_SECOND
 API_V2_HOST="${INFLUX_HOST}/api/v2/query"
 HEADER_AUTH="Authorization: Token ${INFLUX_TOKEN}"
