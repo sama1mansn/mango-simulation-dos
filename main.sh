@@ -3,6 +3,7 @@
 set -ex
 ## Directory settings
 dos_program_dir=$(pwd)
+source utils.sh
 echo ----- stage: show envs upload as an artifcat ---- 
 source env-artifact.sh
 echo ----- stage: prepare files to run the mango_bencher in the clients --- 
