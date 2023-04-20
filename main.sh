@@ -82,7 +82,7 @@ for n in "${instance_name[@]}"
 do
     printf -v instances "%s %s " $instances $n
 done
-echo "INSTANCES=$instances" >> dos-report-env.sh
+echo "INSTANCES=\"$instances\"" >> dos-report-env.sh
 ret_dos_report=$(exec ./dos-report.sh)
 echo ----- stage: upload logs ------
 for sship in "${instance_ip[@]}"
