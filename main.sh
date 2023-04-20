@@ -56,7 +56,7 @@ done
 start_time=$(date -u +%s)
 start_time_adjust=$(get_time_after $start_time 5)
 echo ----- stage: wait for bencher concurrently ------
-# sleep $DURATION
+sleep $DURATION
 echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
