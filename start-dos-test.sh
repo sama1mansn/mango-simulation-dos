@@ -63,9 +63,6 @@ export CLUSTER=$CLUSTER
 configureMetrics
 ## Prepare Log Directory
 if [[ ! -d "$HOME/$HOSTNAME" ]];then
-	mkdir $HOME/$HOSTNAME
-fi
-if [[ ! -d "$HOME/$HOSTNAME" ]];then
 	echo "NO $HOME/$HOSTNAME found" && exit 1
 fi
 
@@ -81,9 +78,9 @@ b_id_f="$HOME/$ID_FILE"
 b_mango_cluster=$CLUSTER
 b_duration=$DURATION
 b_q=$QOUTES_PER_SECOND
-b_tx_save_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/TLOG.csv"
-b_block_save_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/BLOCK.csv"
-b_error_f="$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME/error.txt"
+b_tx_save_f="$HOME/$HOSTNAME/TLOG.csv"
+b_block_save_f="$HOME/$HOSTNAME/BLOCK.csv"
+b_error_f="$HOME/$HOSTNAME/error.txt"
 
 echo $(pwd)
 echo --- start of benchmark $(date)
@@ -106,9 +103,7 @@ if [[ "$RUN_KEEPER" == "true" ]] ;then
 fi
 
 ret_bench=$(./mango-simulation "${args[@]}" 2> $b_error_f &)
+echo --- stage: tar log files ---
 tar --remove-files -czf "${b_tx_save_f}.tar.gz" ${b_tx_save_f} || true
 echo --- end of benchmark $(date)
-echo --- write down log in log-files.out ---
-echo "${b_tx_save_f}.tar.gz" > $HOME/log-files.out
-echo $b_block_save_f >> $HOME/log-files.out
-echo $b_error_f >> $HOME/log-files.out
+
