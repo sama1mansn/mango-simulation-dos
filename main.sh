@@ -43,8 +43,8 @@ client_num=1
 for sship in "${instance_ip[@]}"
 do
     (( idx=$client_num -1 )) || true
-    [[ $client_num -eq 1 ]] && arg2=true || arg2=false
-    [[ $RUN_KEEPER != "true" ]] && arg2=false # override the arg2 base on input from Steps
+    [[ $client_num -eq 1 ]] && arg2="true" || arg2="false"
+    [[ $RUN_KEEPER != "true" ]] && arg2="false" # override the arg2 base on input from Steps
     acct=accounts[$idx]
     echo acct=$acct
     # run start-dos-test.sh which in client machine
