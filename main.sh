@@ -6,21 +6,6 @@ dos_program_dir=$(pwd)
 source utils.sh
 echo ----- stage: show envs upload as an artifcat ---- 
 source env-artifact.sh
-echo ----- stage: prepare files to run the mango_bencher in the clients --- 
-# setup Envs here so that generate-exec-files.sh can be used individually
-# accounts=( "$ACCOUNTS" )
-#Generate first dos-test machine
-# source generate-exec-dos-test.sh
-# acct_num=1
-# for acct in "${accounts[@]}"
-# do
-#     ACCOUNT_FILE=$acct
-#     [[ acct_num -ne 1 ]]&& RUN_KEEPER="false"
-#     echo RUN_KEEPER=$RUN_KEEPER
-#     gen_dos_test $acct_num
-#     let acct_num=$acct_num+1
-# done
-
 echo ----- stage: machines and build and upload mango-simulation ---
 cd "$dos_program_dir"
 # shellcheck source=/dev/null
@@ -62,7 +47,7 @@ echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
 do
-    ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt)
+    ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
     pid=$(cat pid.txt)
     [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     while [ "$pid" != "" ]
@@ -83,6 +68,7 @@ testnet_version=get_testnet_ver
 [[ $SLACK_WEBHOOK ]]&&echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" > dos-report-env.sh
 [[ $DISCORD_WEBHOOK ]]&&echo "DISCORD_WEBHOOK=$DISCORD_WEBHOOK" >> dos-report-env.sh
 [[ $DISCORD_AVATAR_URL ]]&&echo "DISCORD_AVATAR_URL=$DISCORD_AVATAR_URL" >> dos-report-env.sh
+
 echo "START_TIME=${start_time}" >> dos-report-env.sh
 echo "START_TIME2=${start_time_adjust}" >> dos-report-env.sh
 echo "STOP_TIME=${stop_time}" >> dos-report-env.sh
@@ -108,7 +94,7 @@ echo ----- stage: printout run log of last instance ------
 if [[ "$PRINT_LOG" == "true" ]];then
 	ret_print_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'cat /home/sol/start-dos-test.nohup')
 fi
-
+echo ----- stage: delete instances ------
 if [[ "$KEEP_INSTANCES" != "true" ]];then
     echo ----- stage: delete instances ------
     delete_machines
