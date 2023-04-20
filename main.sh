@@ -57,7 +57,7 @@ done
 start_time=$(date -u +%s)
 start_time_adjust=$(get_time_after $start_time 5)
 echo ----- stage: wait for bencher concurrently ------
-sleep $DURATION
+# sleep $DURATION
 echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
@@ -67,8 +67,9 @@ do
     [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     while [ "$pid" != "" ]
     do
-        sleep 3
+        sleep 10
         ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
+        pid=$(cat pid.txt)
         [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     done
 done
