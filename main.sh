@@ -39,7 +39,7 @@ do
 done
 
 echo ----- stage: run dos test ---
-accounts=( "$ACCOUNTS" )
+accounts=( $ACCOUNTS )
 client_num=1
 for sship in "${instance_ip[@]}"
 do
