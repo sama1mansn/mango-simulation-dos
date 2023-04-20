@@ -56,7 +56,8 @@ done
 # # Get Time Start
 start_time=$(date -u +%s)
 start_time_adjust=$(get_time_after $start_time 5)
-
+echo ----- stage: wait for bencher concurrently ------
+sleep $DURATION
 echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
@@ -71,8 +72,6 @@ do
         [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     done
 done
-
-
 
 echo ----- stage: upload logs ------
 for sship in "${instance_ip[@]}"
