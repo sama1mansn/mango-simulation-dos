@@ -55,6 +55,7 @@ done
 # # Get Time Start
 start_time=$(date -u +%s)
 start_time_adjust=$(get_time_after $start_time 5)
+
 echo ----- stage: wait for bencher concurrently ------
 sleep $DURATION
 echo ----- stage: check finish of process ---
@@ -71,12 +72,6 @@ do
         pid=$(cat pid.txt)
         [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     done
-done
-
-echo ----- stage: upload logs ------
-for sship in "${instance_ip[@]}"
-do
-    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh)
 done
 
 ### Get Time Stop
@@ -102,22 +97,23 @@ do
 done
 echo "INSTANCES=$instances" >> dos-report-env.sh
 ret_dos_report=$(exec ./dos-report.sh)
+echo ----- stage: upload logs ------
+for sship in "${instance_ip[@]}"
+do
+    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh)
+done
+sleep 5
 
-# echo ----- stage: printout run log ------
-# if [[ "$PRINT_LOG" == "true" ]];then
-# 	ret_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@${instance_ip[0]} 'cat /home/sol/start-dos-test.nohup')
-# fi
+echo ----- stage: printout run log ------
+if [[ "$PRINT_LOG" == "true" ]];then
+	ret_print_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'cat /home/sol/start-dos-test.nohup')
+fi
 
-
-# sleep 10
-# if [[ "$KEEP_INSTANCES" != "true" ]];then
-#     echo ----- stage: delete instances ------
-#     delete_machines
-# fi
-
+if [[ "$KEEP_INSTANCES" != "true" ]];then
+    echo ----- stage: delete instances ------
+    delete_machines
+fi
 exit 0
 
-# echo ----- stage: printout run log ------
-# if [[ "$PRINT_LOG" == "true" ]];then
-# 	ret_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@${instance_ip[0]} 'cat /home/sol/start-dos-test.nohup')
-# fi
+
+

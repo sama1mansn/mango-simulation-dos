@@ -93,9 +93,8 @@ fi
 echo ---- stage: copy files to HOME and mkdir log folder ----
 cp "$HOME/$GIT_REPO_DIR/start-dos-test.sh" /home/sol/start-dos-test.sh
 cp "$HOME/$GIT_REPO_DIR/start-upload-logs.sh" /home/sol/start-upload-logs.sh
-[[ -d "$HOME/$BUILDKITE_BUILD_ID" ]] && rm -rf "$HOME/$BUILDKITE_BUILD_ID"
-echo HOSTNAME=$HOSTNAME
-mkdir -p "$HOME/$BUILDKITE_BUILD_ID/$HOSTNAME"
+[[ -d "$HOME/$HOSTNAME" ]] && rm -rf "$HOME/$HOSTNAME"
+mkdir -p "$HOME/$HOSTNAME"
 
 echo ---- stage: download id, accounts and authority file in HOME ----
 cd $HOME

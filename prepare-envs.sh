@@ -76,5 +76,6 @@ echo "ENV_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUI
 echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
+echo "BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
