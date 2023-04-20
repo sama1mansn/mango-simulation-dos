@@ -30,9 +30,9 @@ upload_file() {
 
 ## Download key files from gsutil
 if [[ "$1" != "true" && "$1" != "false" ]];then 
-	BUILD_MANGO_SIMULATOR="false"
+	build_binary="false"
 else
-	BUILD_MANGO_SIMULATOR="$1"
+	build_binary="$1"
 fi
 [[ ! "$2" ]]&& echo "No artifact bucket" && exit 1
 [[ ! "$3" ]]&& echo "No artifact filename" && exit 1
@@ -77,7 +77,7 @@ git clone "$MANGO_SIMULATION_REPO" "$HOME/$MANGO_SIMULATION_DIR"
 echo ------- stage: build or download mango-simulation ------
 # clone mango_bencher and mkdir dep dir
 cd "$HOME/$MANGO_SIMULATION_DIR"
-if  [[ "$BUILD_MANGO_SIMULATOR" == "true" ]];then
+if  [[ "$build_binary" == "true" ]];then
     git checkout "$MANGO_SIMULATION_BRANCH"
 	cargo build --release
 	cp "$HOME/$MANGO_SIMULATION_DIR/target/release/mango-simulation" $HOME

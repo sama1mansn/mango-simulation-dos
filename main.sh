@@ -32,7 +32,6 @@ arg3="$ENV_ARTIFACT_FILE"
 for sship in "${instance_ip[@]}"
 do
     [[ $client_num -eq 1 ]] && arg1="true" || arg1="false"
-    [[ $BUILD_MANGO_SIMULATOR != "true" ]] && arg1="false" # override the arg1 base on input from Steps
     # run start-build-dependency.sh which in agent machine
     ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh "$arg1" "$arg2" "$arg3")
     (( client_num++ )) || true
