@@ -78,6 +78,7 @@ echo "DURATION=$DURATION" >> dos-report-env.sh
 echo "QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> dos-report-env.sh
 echo "NUM_CLIENT=$NUM_CLIENT" >> dos-report-env.sh
 echo "CLUSTER_VERSION=$testnet_version" >> dos-report-env.sh
+echo "BUILDKITE_BUILD_URL=$BUILDKITE_BUILD_URL" >> dos-report-env.sh
 for n in "${instance_name[@]}"
 do
     printf -v instances "%s %s " $instances $n
