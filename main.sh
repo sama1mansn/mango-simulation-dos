@@ -92,9 +92,9 @@ done
 sleep 5
 
 echo ----- stage: printout run log of last instance ------
-if [[ "$PRINT_LOG" == "true" ]];then
-	ret_print_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'cat /home/sol/start-dos-test.nohup')
-fi
+# if [[ "$PRINT_LOG" == "true" ]];then
+# 	ret_print_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'cat /home/sol/start-dos-test.nohup')
+# fi
 echo ----- stage: delete instances ------
 if [[ "$KEEP_INSTANCES" != "true" ]];then
     echo ----- stage: delete instances ------
