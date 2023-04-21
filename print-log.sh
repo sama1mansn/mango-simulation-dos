@@ -6,7 +6,7 @@ source utils.sh
 echo ---- stage: print log ----
 if [[ "$PRINT_LOG" == "true" ]];then
     # only download start-dos-test(1).nohup file
-    ret_download_log=$(download_file "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID" start-dos-test1.nohup ./) || true
+    ret_download_log=$(download_file "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID" start-dos-test-1.nohup ./) || true
 fi
 sleep 3
 if [[ -f  "start-dos-test1.nohup" ]];then
