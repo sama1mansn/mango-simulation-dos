@@ -89,6 +89,7 @@ else
 	download_file "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET" "$MANGO_SIMULATION_ARTIFACT_FILE" "$HOME"
 	[[ ! -f "$HOME/mango-simulation" ]] && echo no mango-simulation downloaded && exit 1
 	chmod +x $HOME/mango-simulation
+	echo mango-simuation downloaded
 fi
 echo ---- stage: copy files to HOME and mkdir log folder ----
 cp "$HOME/$GIT_REPO_DIR/start-dos-test.sh" /home/sol/start-dos-test.sh

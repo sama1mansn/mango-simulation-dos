@@ -14,7 +14,8 @@ cd $HOME
 [[ -d "$HOME/$HOSTNAME" ]] && ls -al "$HOME/$HOSTNAME" || exit 1
 upload_log_folder "$HOME/$HOSTNAME"
 if [[ -f  "$HOME/start-dos-test.nohup" ]];then
-	gsutil cp "$HOME/start-dos-test.nohup" "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET/start-dos-test.nohup"
+	# must upload to build level, otherwise when the printlog in different job, it cannot find the file
+	gsutil cp "$HOME/start-dos-test.nohup" "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/start-dos-test-$1.nohup"
 fi
 echo "all logs are uploaded"
 exit 0
