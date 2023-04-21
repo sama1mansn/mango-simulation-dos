@@ -86,16 +86,13 @@ done
 echo "INSTANCES=\"$instances\"" >> dos-report-env.sh
 ret_dos_report=$(exec ./dos-report.sh)
 echo ----- stage: upload logs ------
+cnt=1
 for sship in "${instance_ip[@]}"
 do
-    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh)
+    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh $cnt)
+    (( cnt++ )) || true
 done
 sleep 5
-
-echo ----- stage: printout run log of last instance ------
-# if [[ "$PRINT_LOG" == "true" ]];then
-# 	ret_print_log=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'cat /home/sol/start-dos-test.nohup')
-# fi
 echo ----- stage: delete instances ------
 if [[ "$KEEP_INSTANCES" != "true" ]];then
     echo ----- stage: delete instances ------
