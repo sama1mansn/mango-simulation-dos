@@ -71,11 +71,11 @@ echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
 echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
 echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
-## artifact address
-echo "ENV_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
-echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
-echo "MANGO_SIMULATION_ARTIFACT_BUCKET=$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" >> env-artifact.sh
-echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
 echo "BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER" >> env-artifact.sh
+## artifact address
+echo "ARTIFACT_BUCKET=$ARTIFACT_BUCKET" >> env-artifact.sh
+echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
+echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
+
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0

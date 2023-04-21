@@ -82,11 +82,11 @@ if  [[ "$build_binary" == "true" ]];then
 	cargo build --release
 	cp "$HOME/$MANGO_SIMULATION_DIR/target/release/mango-simulation" $HOME
 	chmod +x $HOME/mango-simulation
-	upload_file $HOME/mango-simulation "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET/$MANGO_SIMULATION_ARTIFACT_FILE"
+	upload_file $HOME/mango-simulation "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID/$MANGO_SIMULATION_ARTIFACT_FILE"
 else
 	# download from bucket
 	cd $HOME
-	download_file "gs://$MANGO_SIMULATION_ARTIFACT_BUCKET" "$MANGO_SIMULATION_ARTIFACT_FILE" "$HOME"
+	download_file "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" "$MANGO_SIMULATION_ARTIFACT_FILE" "$HOME"
 	[[ ! -f "$HOME/mango-simulation" ]] && echo no mango-simulation downloaded && exit 1
 	chmod +x $HOME/mango-simulation
 	echo mango-simuation downloaded

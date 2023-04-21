@@ -105,5 +105,6 @@ fi
 ret_bench=$(./mango-simulation "${args[@]}" 2> $b_error_f &)
 echo --- stage: tar log files ---
 tar --remove-files -czf "${b_tx_save_f}.tar.gz" ${b_tx_save_f} || true
+[[ -f "$HOME/start-dos-test.nohup" ]] && cp "$HOME/start-dos-test.nohup" "$HOME/$HOSTNAME" || true
 echo --- end of benchmark $(date)
 
