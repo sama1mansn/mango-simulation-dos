@@ -38,7 +38,6 @@ function get_testnet_ver() {
         ret=$(curl $ENDPOINT -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getVersion"}
         ' | jq '.result."solana-core"' | sed 's/\"//g') || true
         if [[ $ret =~ [0-9]+.[0-9]+.[0-9]+ ]];then
-             echo v$ret
             break
         fi
         sleep 3

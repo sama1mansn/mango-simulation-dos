@@ -10,7 +10,7 @@ function discord_send(){
 }
 
 printf -v test_config '**Test Configuration:**\\n```%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n%s\\n```' \
-		"client = mango_bencher-dos-test" \
+		"client = mango-simulation-dos-test" \
 		"cluster version = $cluster_version" "number-of-clients = $num_clients" \
 		"duration = $duration" "qoutes_per_second = $qoutes_per_second" "instances = $instances"
 
