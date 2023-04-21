@@ -60,7 +60,7 @@ sudo npm install -g yarn
 # It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files.
 # To clear this warning, remove package-lock.json.
 # Memo by author: use yarn instead of npm install
-rm -f package-lock.json
+rm -f package-lock.json || true
 yarn install
 rustup default stable
 rustup update
