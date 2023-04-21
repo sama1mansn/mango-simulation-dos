@@ -52,7 +52,7 @@ do
     [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"
     while [ "$pid" != "" ]
     do
-        sleep 10
+        sleep $TERMINATION_CHECK_INTERVAL
         ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
         pid=$(cat pid.txt)
         [[ $pid == "" ]] && echo "$sship has finished run mango-simulation" || echo "pid=$pid"

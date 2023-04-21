@@ -28,6 +28,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
 [[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& MANGO_SIMULATION_PRIVATE_BUCKET="mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_BUCKET use $MANGO_SIMULATION_PRIVATE_BUCKET
 [[ ! "$ARTIFACT_BUCKET" ]]&& ARTIFACT_BUCKET="buildkite-dos-agent" && no MANGO_SIMULATION_PRIVATE_BUCKET use $ARTIFACT_BUCKET
+[[ ! "$TERMINATION_CHECK_INTERVAL" ]]&& TERMINATION_CHECK_INTERVAL=30 && no TERMINATION_CHECK_INTERVAL use $TERMINATION_CHECK_INTERVAL
 
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
@@ -67,6 +68,7 @@ echo "NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "AVAILABLE_ZONE=\"$AVAILABLE_ZONE\"" >> env-artifact.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
 echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
+echo "TERMINATION_CHECK_INTERVAL=$TERMINATION_CHECK_INTERVAL" >> env-artifact.sh
 # buildkite build envs
 echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
