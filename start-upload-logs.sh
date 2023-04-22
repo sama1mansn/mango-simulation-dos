@@ -20,7 +20,7 @@ if [[ -f  "$HOME/start-dos-test.nohup" ]];then
 else 
 	echo no start-dos-test.nohup found in $home
 fi
-[[ -f  "$HOME/start-dos-test.nohup" ]]&& cat start-dos-test.nohup || true
+# [[ -f  "$HOME/start-dos-test.nohup" ]]&& cat start-dos-test.nohup || true
 
 echo "all logs are uploaded"
 exit 0
