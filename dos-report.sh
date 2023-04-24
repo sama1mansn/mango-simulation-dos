@@ -6,7 +6,7 @@ source dos-report-env.sh
 # check ENV
 # no env , exit
 [[ ! $SLACK_WEBHOOK ]]&&[[ ! $DISCORD_WEBHOOK ]]&& echo no WEBHOOK found&&exit 1
-[[ ! $DISCORD_AVATAR_URL ]]&&DISCORD_AVATAR_URL="https://i.imgur.com/CS0oRfD.jpg" || echo use DISCORD_AVATAR_URL=$DISCORD_AVATAR_URL
+[[ ! $DISCORD_AVATAR_URL ]]&&DISCORD_AVATAR_URL="https://i.imgur.com/LJismmJ.jpg" || echo use DISCORD_AVATAR_URL=$DISCORD_AVATAR_URL
 [[ ! $START_TIME ]]&& echo START_TIME env not found&&exit 1
 [[ ! $START_TIME2 ]]&& echo START_TIME2 env not found&&exit 1
 [[ ! $STOP_TIME ]]&& echo STOP_TIME env not found&&exit 1
