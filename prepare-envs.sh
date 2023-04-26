@@ -9,6 +9,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$ACCOUNTS" ]]&& ACCOUNTS="accounts-1_20.json accounts-2_20.json accounts-3_10.json" && echo ACCOUNTS not found, use $ACCOUNTS
 [[ ! "$AUTHORITY_FILE" ]] && AUTHORITY_FILE=authority.json && echo AUTHORITY_FILE , use $AUTHORITY_FILE
 [[ ! "$ID_FILE" ]] && ID_FILE=ids.json && echo ID_FILE , use $ID_FILE
+[[ ! "$SAVE_TRANSACTIONS_LOG" ]] && SAVE_TRANSACTIONS_LOG="true" && ehco SAVE_TRANSACTIONS_LOG not found, use $SAVE_TRANSACTIONS_LOG
 ## keeper_run run ENVS
 [[ ! "$CLUSTER" ]] && KEEPER_CLUSTER=testnet && echo KEEPER_CLUSTER , use $KEEPER_CLUSTER
 ## mango-simulation build repo ENVS
@@ -50,6 +51,7 @@ echo "QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> env-artifact.sh
 echo "AUTHORITY_FILE=$AUTHORITY_FILE" >> env-artifact.sh
 echo "ID_FILE=$ID_FILE" >> env-artifact.sh
 echo "ACCOUNTS=\"$ACCOUNTS\"" >> env-artifact.sh
+echo "SAVE_TRANSACTIONS_LOG=$SAVE_TRANSACTIONS_LOG" >> env-artifact.sh
 # Keeper Run Envs
 echo "CLUSTER=$CLUSTER" >> env-artifact.sh
 #mango-simulation build repo ENVS
