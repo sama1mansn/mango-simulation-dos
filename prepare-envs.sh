@@ -73,6 +73,7 @@ echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
 echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
 echo "TERMINATION_CHECK_INTERVAL=$TERMINATION_CHECK_INTERVAL" >> env-artifact.sh
 # buildkite build envs
+echo "BUILDKITE_BRANCH=$BUILDKITE_BRANCH" >> env-artifact.sh
 echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
 echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
