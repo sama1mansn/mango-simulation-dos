@@ -16,7 +16,7 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$MANGO_SIMULATION_REPO" ]]&& MANGO_SIMULATION_REPO=https://github.com/solana-labs/mango-simulation.git && echo MANGO_SIMULATION_REPO env not found, use $MANGO_SIMULATION_REPO
 [[ ! "$MANGO_SIMULATION_BRANCH" ]]&& MANGO_SIMULATION_BRANCH=main && echo MANGO_SIMULATION_BRANCH env not found, use $MANGO_SIMULATION_BRANCH
 [[ ! "$MANGO_SIMULATION_DIR" ]]&& MANGO_SIMULATION_DIR=/home/sol/mango_simulation && echo MANGO_SIMULATION_DIR env not found, use $MANGO_SIMULATION_DIR
-[[ ! "$RUN_KEEPER" ]] && RUN_KEEPER=true && echo no RUN_KEEPER , use $RUN_KEEPER
+[[ ! "$RUN_KEEPER" ]] && RUN_KEEPER="true" && echo no RUN_KEEPER , use $RUN_KEEPER
 [[ ! "$MANGO_CONFIGURE_REPO" ]]&& MANGO_CONFIGURE_REPO=https://github.com/solana-labs/configure_mango.git && echo MANGO_CONFIGURE_REPO env not found, use $MANGO_CONFIGURE_REPO
 [[ ! "$MANGO_CONFIGURE_DIR" ]] && MANGO_CONFIGURE_DIR=configure_mango && echo no MANGO_CONFIGURE_DIR , use $MANGO_CONFIGURE_DIR
 ## CI program ENVS
@@ -51,6 +51,7 @@ echo "QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> env-artifact.sh
 echo "AUTHORITY_FILE=$AUTHORITY_FILE" >> env-artifact.sh
 echo "ID_FILE=$ID_FILE" >> env-artifact.sh
 echo "ACCOUNTS=\"$ACCOUNTS\"" >> env-artifact.sh
+echo "RUN_KEEPER=$RUN_KEEPER" >> env-artifact.sh
 echo "SAVE_TRANSACTIONS_LOG=$SAVE_TRANSACTIONS_LOG" >> env-artifact.sh
 # Keeper Run Envs
 echo "CLUSTER=$CLUSTER" >> env-artifact.sh
