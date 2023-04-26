@@ -71,6 +71,7 @@ cd $HOME
 git clone "$GIT_REPO"
 cd $GIT_REPO_DIR
 git checkout "$BUILDKITE_BRANCH"
+cd $HOME
 git checkout "$GIT_BRANCH"
 [[ -d "$HOME/$MANGO_CONFIGURE_DIR" ]]&& rm -rf "$HOME/$MANGO_CONFIGURE_DIR"
 git clone "$MANGO_CONFIGURE_REPO" # may remove later
