@@ -93,6 +93,7 @@ args=(
   --mango-cluster $b_mango_cluster
   --duration $b_duration
   --quotes-per-second $b_q
+  --block-data-save-file $b_block_save_f
   --markets-per-mm 5
 )
 
