@@ -17,7 +17,7 @@ source $HOME/env-artifact.sh
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
 [[ ! "$1" ]]&& echo no ACCOUNT_FILE as arg1 && exit 1 || ACCOUNT_FILE="$1"
-[[ ! "$2" ]]&& echo no NO RUN_KEEPER as arg2 && exit 1 || RUN_KEEPER="$2"
+[[ ! "$2" ]]&& echo no RUN_KEEPER as arg2 && exit 1 || RUN_KEEPER="$2"
 
 
 #### metrics env ####
