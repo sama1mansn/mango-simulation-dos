@@ -17,7 +17,7 @@ source $HOME/env-artifact.sh
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
 [[ ! "$1" ]]&& echo no ACCOUNT_FILE as arg1 && exit 1 || ACCOUNT_FILE="$1"
-[[ ! "$2" ]]&& echo no NO RUN_KEEPER as arg2 && exit 1 || RUN_KEEPER="\"$2\""
+[[ ! "$2" ]]&& echo no RUN_KEEPER as arg2 && exit 1 || RUN_KEEPER="$2"
 
 
 #### metrics env ####
@@ -93,10 +93,13 @@ args=(
   --mango-cluster $b_mango_cluster
   --duration $b_duration
   --quotes-per-second $b_q
-  --transaction-save-file $b_tx_save_f
   --block-data-save-file $b_block_save_f
   --markets-per-mm 5
 )
+
+if [[ "$SAVE_TRANSACTIONS_LOG" == "true" ]]; then
+  args+=(--transaction-save-file $b_tx_save_f)
+fi
 
 if [[ "$RUN_KEEPER" == "true" ]] ;then
     args+=(--keeper-authority authority.json)
@@ -104,7 +107,9 @@ fi
 
 ret_bench=$(./mango-simulation "${args[@]}" 2> $b_error_f &)
 echo --- stage: tar log files ---
-tar --remove-files -czf "${b_tx_save_f}.tar.gz" ${b_tx_save_f} || true
+if [[ "$SAVE_TRANSACTIONS_LOG" == "true" ]]; then
+  tar --remove-files -czf "${b_tx_save_f}.tar.gz" ${b_tx_save_f} || true
+fi
 [[ -f "$HOME/start-dos-test.nohup" ]] && cp "$HOME/start-dos-test.nohup" "$HOME/$HOSTNAME" || true
 echo --- end of benchmark $(date)
 exit 0

@@ -9,13 +9,14 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$ACCOUNTS" ]]&& ACCOUNTS="accounts-1_20.json accounts-2_20.json accounts-3_10.json" && echo ACCOUNTS not found, use $ACCOUNTS
 [[ ! "$AUTHORITY_FILE" ]] && AUTHORITY_FILE=authority.json && echo AUTHORITY_FILE , use $AUTHORITY_FILE
 [[ ! "$ID_FILE" ]] && ID_FILE=ids.json && echo ID_FILE , use $ID_FILE
+[[ ! "$SAVE_TRANSACTIONS_LOG" ]] && SAVE_TRANSACTIONS_LOG="false" && ehco SAVE_TRANSACTIONS_LOG not found, use $SAVE_TRANSACTIONS_LOG
 ## keeper_run run ENVS
 [[ ! "$CLUSTER" ]] && KEEPER_CLUSTER=testnet && echo KEEPER_CLUSTER , use $KEEPER_CLUSTER
 ## mango-simulation build repo ENVS
 [[ ! "$MANGO_SIMULATION_REPO" ]]&& MANGO_SIMULATION_REPO=https://github.com/solana-labs/mango-simulation.git && echo MANGO_SIMULATION_REPO env not found, use $MANGO_SIMULATION_REPO
 [[ ! "$MANGO_SIMULATION_BRANCH" ]]&& MANGO_SIMULATION_BRANCH=main && echo MANGO_SIMULATION_BRANCH env not found, use $MANGO_SIMULATION_BRANCH
 [[ ! "$MANGO_SIMULATION_DIR" ]]&& MANGO_SIMULATION_DIR=/home/sol/mango_simulation && echo MANGO_SIMULATION_DIR env not found, use $MANGO_SIMULATION_DIR
-[[ ! "$RUN_KEEPER" ]] && RUN_KEEPER=true && echo no RUN_KEEPER , use $RUN_KEEPER
+[[ ! "$RUN_KEEPER" ]] && RUN_KEEPER="true" && echo no RUN_KEEPER , use $RUN_KEEPER
 [[ ! "$MANGO_CONFIGURE_REPO" ]]&& MANGO_CONFIGURE_REPO=https://github.com/solana-labs/configure_mango.git && echo MANGO_CONFIGURE_REPO env not found, use $MANGO_CONFIGURE_REPO
 [[ ! "$MANGO_CONFIGURE_DIR" ]] && MANGO_CONFIGURE_DIR=configure_mango && echo no MANGO_CONFIGURE_DIR , use $MANGO_CONFIGURE_DIR
 ## CI program ENVS
@@ -50,6 +51,8 @@ echo "QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> env-artifact.sh
 echo "AUTHORITY_FILE=$AUTHORITY_FILE" >> env-artifact.sh
 echo "ID_FILE=$ID_FILE" >> env-artifact.sh
 echo "ACCOUNTS=\"$ACCOUNTS\"" >> env-artifact.sh
+echo "RUN_KEEPER=$RUN_KEEPER" >> env-artifact.sh
+echo "SAVE_TRANSACTIONS_LOG=$SAVE_TRANSACTIONS_LOG" >> env-artifact.sh
 # Keeper Run Envs
 echo "CLUSTER=$CLUSTER" >> env-artifact.sh
 #mango-simulation build repo ENVS
@@ -70,6 +73,7 @@ echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
 echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
 echo "TERMINATION_CHECK_INTERVAL=$TERMINATION_CHECK_INTERVAL" >> env-artifact.sh
 # buildkite build envs
+echo "BUILDKITE_BRANCH=$BUILDKITE_BRANCH" >> env-artifact.sh
 echo "BUILDKITE_PIPELINE_ID=$BUILDKITE_PIPELINE_ID" >> env-artifact.sh
 echo "BUILDKITE_BUILD_ID=$BUILDKITE_BUILD_ID" >> env-artifact.sh
 echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID" >> env-artifact.sh
