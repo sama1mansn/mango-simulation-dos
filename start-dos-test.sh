@@ -10,10 +10,10 @@ source $HOME/env-artifact.sh
 #############################
 [[ ! "$CLUSTER" ]] && echo no CLUSTER && exit 1
 [[ ! "$SOLANA_METRICS_CONFIG" ]] && echo no SOLANA_METRICS_CONFIG ENV && exit 1
-[[ ! "$RUST_LOG" ]] && export RUST_LOG=info
+[[ ! "$RUST_LOG" ]] && RUST_LOG=info
 [[ ! "$DURATION" ]] && echo no DURATION && exit 1
 [[ ! "$QOUTES_PER_SECOND" ]] && echo no QOUTES_PER_SECOND && exit 1
-[[ ! "$ENDPOINT" ]]&& echo "No ENDPOINT" > dos-env.out && exit 1
+[[ ! "$ENDPOINT" ]]&& echo "No ENDPOINT" && exit 1
 [[ ! "$AUTHORITY_FILE" ]] && echo no AUTHORITY_FILE && exit 1
 [[ ! "$ID_FILE" ]] && echo no ID_FILE && exit 1
 [[ ! "$1" ]]&& echo no ACCOUNT_FILE as arg1 && exit 1 || ACCOUNT_FILE="$1"
@@ -57,8 +57,10 @@ configureMetrics() {
     fi
   done
 }
-#### keeper ENV ####
+#### export ENVs ####
 export CLUSTER=$CLUSTER
+export RUST_LOG=$RUST_LOG
+export ENDPOINT_URL=$ENDPOINT
 ## Prepare Metrics Env
 configureMetrics
 ## Prepare Log Directory
