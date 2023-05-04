@@ -62,7 +62,8 @@ export CLUSTER=$CLUSTER
 export RUST_LOG=$RUST_LOG
 export ENDPOINT_URL=$ENDPOINT
 ### check solana-sys-tuner status
-sudo systemctl status solana-sys-tuner || true
+sudo systemctl status solana-sys-tuner > sysstatus.out || true
+[[ -f "sysstatus.out" ]] && cat sysstatus.out
 ## Prepare Metrics Env
 configureMetrics
 ## Prepare Log Directory
