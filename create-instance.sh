@@ -4,7 +4,7 @@ declare -a instance_ip
 declare -a instance_name
 declare -a instance_zone
 create_interval=60
-[[ ! "$GC_IMAGE" ]] && GC_IMAGE=mango-simulator-client-230502&& echo GC_IMAGE env not found, use $GC_IMAGE
+[[ ! "$GC_IMAGE" ]] && GC_IMAGE=mango-simulator-client-230504&& echo GC_IMAGE env not found, use $GC_IMAGE
 if [[ ! "$AVAILABLE_ZONE" ]];then
 	available_zone=( us-west2-b asia-east1-b asia-northeast1-a )
 else
