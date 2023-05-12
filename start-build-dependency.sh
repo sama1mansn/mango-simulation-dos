@@ -110,7 +110,7 @@ download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" "$ID_FILE" "$HOME"
 [[ ! -f "$ID_FILE" ]]&&echo no "$ID_FILE" file && exit 1
 download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" "$AUTHORITY_FILE" "$HOME"
 [[ ! -f "$AUTHORITY_FILE" ]]&&echo no "$AUTHORITY_FILE" file && exit 1
-download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" "$VALIDATOR_ID" "$HOME"
+download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" "$VALIDATOR_ID_FILE" "$HOME"
 [[ ! -f "$VALIDATOR_ID_FILE" ]]&&echo no "$VALIDATOR_ID_FILE" file && exit 1
 download_accounts=( $ACCOUNTS )
 for acct in "${download_accounts[@]}"
