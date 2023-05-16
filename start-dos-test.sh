@@ -74,6 +74,7 @@ echo --- stage: Run Solana-simulation -----
 # benchmark exec in $HOME Directory
 cd $HOME
 b_cluster_ep=$ENDPOINT
+b_validator_id_f="$HOME/$VALIDATOR_ID_FILE"
 b_auth_f="$HOME/$AUTHORITY_FILE"
 b_acct_f="$HOME/$ACCOUNT_FILE"
 b_id_f="$HOME/$ID_FILE"
@@ -89,7 +90,7 @@ echo --- start of benchmark $(date)
 
 args=(
   --url $b_cluster_ep
-  --identity $b_auth_f
+  --identity $b_validator_id_f
   --accounts $b_acct_f
   --mango $b_id_f
   --mango-cluster $b_mango_cluster
@@ -104,7 +105,7 @@ if [[ "$SAVE_TRANSACTIONS_LOG" == "true" ]]; then
 fi
 
 if [[ "$RUN_KEEPER" == "true" ]] ;then
-    args+=(--keeper-authority authority.json)
+    args+=(--keeper-authority $b_auth_f)
 fi
 
 ret_bench=$(./mango-simulation "${args[@]}" 2> $b_error_f &)

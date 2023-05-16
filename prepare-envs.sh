@@ -7,7 +7,8 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$DURATION" ]]&& echo DURATION env not found && exit 1
 [[ ! "$QOUTES_PER_SECOND" ]]&& echo ENDPOINT env not found && exit 1
 [[ ! "$ACCOUNTS" ]]&& ACCOUNTS="accounts-1_20.json accounts-2_20.json accounts-3_10.json" && echo ACCOUNTS not found, use $ACCOUNTS
-[[ ! "$AUTHORITY_FILE" ]] && AUTHORITY_FILE=authority.json && echo AUTHORITY_FILE , use $AUTHORITY_FILE
+[[ ! "$AUTHORITY_FILE" ]] && AUTHORITY_FILE=authority.json && echo AUTHORITY_FILE not found , use $AUTHORITY_FILE
+[[ ! "$VALIDATOR_ID_FILE" ]] && VALIDATOR_ID_FILE=validator_id.json && echo VALIDATOR_ID_FILE no found , use $VALIDATOR_ID_FILE
 [[ ! "$ID_FILE" ]] && ID_FILE=ids.json && echo ID_FILE , use $ID_FILE
 [[ ! "$SAVE_TRANSACTIONS_LOG" ]] && SAVE_TRANSACTIONS_LOG="false" && ehco SAVE_TRANSACTIONS_LOG not found, use $SAVE_TRANSACTIONS_LOG
 ## keeper_run run ENVS
@@ -49,6 +50,7 @@ echo "ENDPOINT=$ENDPOINT" >> env-artifact.sh
 echo "DURATION=$DURATION" >> env-artifact.sh
 echo "QOUTES_PER_SECOND=$QOUTES_PER_SECOND" >> env-artifact.sh
 echo "AUTHORITY_FILE=$AUTHORITY_FILE" >> env-artifact.sh
+echo "VALIDATOR_ID_FILE=$VALIDATOR_ID_FILE" >> env-artifact.sh
 echo "ID_FILE=$ID_FILE" >> env-artifact.sh
 echo "ACCOUNTS=\"$ACCOUNTS\"" >> env-artifact.sh
 echo "RUN_KEEPER=$RUN_KEEPER" >> env-artifact.sh
