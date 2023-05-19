@@ -94,12 +94,12 @@ _min_optimistic_slot_elapsed='from(bucket: "tds")|> range(start:'${start_time}' 
 					|> drop(columns: ["_measurement","_field", "_start", "_stop","host_id","latest","_time"])'
 _90_optimistic_slot_elapsed='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "optimistic_slot_elapsed")
-					|> aggregateWindow(every: '${window_interval_long}',  fn: (column, tables=<-) => tables |> quantile(q: 0.9))
+					|> aggregateWindow(every: '${window_interval_long}',  fn: mean)
 					|> group()|>quantile(column: "_value", q:0.9)|>toInt()
 					|> drop(columns: ["_start", "_stop"])'
 _99_optimistic_slot_elapsed='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "optimistic_slot_elapsed")
-					|> aggregateWindow(every: '${window_interval_long}',  fn: (column, tables=<-) => tables |> quantile(q: 0.99))
+					|> aggregateWindow(every: '${window_interval_long}',  fn: mean)
 					|> group()|>quantile(column: "_value", q:0.99)|>toInt()
 					|> drop(columns: ["_start", "_stop"])'
 # ct_stats_block_cost
