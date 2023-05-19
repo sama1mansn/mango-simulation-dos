@@ -198,7 +198,8 @@ _blocks_fill_50='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop
   				|> group()
   				|> filter(fn: (r) => r.block_cost > (48000000.0*0.5))
 				|> aggregateWindow(every: '${window_interval}',  fn: (column, tables=<-) => tables |>  count(column: "bank_slot"))
-  				|> count(column: "bank_slot")'
+  				|> sum(column: "bank_slot")
+				|> drop(columns: ["_start", "_stop"])'
 _blocks_fill_90='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
   				|> filter(fn: (r) => r._measurement == "cost_tracker_stats")
   				|> filter(fn: (r) => r._field == "bank_slot" or r._field == "block_cost")
@@ -206,7 +207,8 @@ _blocks_fill_90='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop
   				|> group()
   				|> filter(fn: (r) => r.block_cost > (48000000.0*0.9))
   				|> aggregateWindow(every: '${window_interval}',  fn: (column, tables=<-) => tables |>  count(column: "bank_slot"))
-    			|> sum(column: "bank_slot")'
+    			|> sum(column: "bank_slot")
+				|> drop(columns: ["_start", "_stop"])'
 
 declare -A FLUX  # FLUX command
 FLUX[start_slot]=$_start_slot

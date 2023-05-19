@@ -3,6 +3,7 @@
 set -ex
 # read env
 source dos-report-env.sh
+source env-artifact.sh
 # check ENV
 # no env , exit
 [[ ! $SLACK_WEBHOOK ]]&&[[ ! $DISCORD_WEBHOOK ]]&& echo no WEBHOOK found&&exit 1
