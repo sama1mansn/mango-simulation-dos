@@ -17,6 +17,8 @@ source dos-report-env.sh
 [[ ! $CLUSTER_VERSION ]]&&	echo CLUSTER_VERSION env not found, use $CLUSTER_VERSION&&exit 1
 [[ ! $INFLUX_TOKEN ]]&& echo INFLUX_TOKEN env not found&&exit 1
 [[ ! $INFLUX_HOST ]]&& echo INFLUX_HOST env not found, use $INFLUX_HOST&&exit 1
+# set large data set
+[[ ! $LARGE_DATA_SET ]] && LARGE_DATA_SET="false"
 
 if [[ -n $BUILDKITE_BUILD_URL ]] ; then
 	BUILD_BUTTON_TEXT="Build Kite Job"
@@ -38,6 +40,15 @@ start_time2=$START_TIME2
 stop_time=$STOP_TIME
 stop_time2=$STOP_TIME2
 instances=$INSTANCES
+## setup window interval for query
+window_interval="10s" 
+window_interval_long="10s"
+if [[ "$LARGE_DATA_SET" == "true" ]];then
+	[[ ! "$INFLUX_WINDOW_INTERVAL" ]] && INFLUX_WINDOW_INTERVAL="10m"
+	[[ ! "$INFLUX_WINDOW_INTERVAL_LONG" ]] && INFLUX_WINDOW_INTERVAL_LONG="30m"
+	window_interval=$INFLUX_WINDOW_INTERVAL
+	window_interval_long=$INFLUX_WINDOW_INTERVAL_LONG
+fi
 
 ## make sure 
 source influx_data.sh
