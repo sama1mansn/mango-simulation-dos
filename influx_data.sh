@@ -20,12 +20,12 @@ _max_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_t
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count")
 	   				|> aggregateWindow(every: '${window_interval}', fn: max)
 					|> group()|>max()|>toInt()
-					|> drop(columns: ["_start", "_stop","count"])'
+					|> drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
 _min_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count")
 	   				|> aggregateWindow(every: '${window_interval}', fn: min)
 					|> group()|>min()|>toInt()
-					|> drop(columns: ["_start", "_stop","count"])'
+					|> drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
 
 _90_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count" )
