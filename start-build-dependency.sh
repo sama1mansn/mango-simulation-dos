@@ -10,12 +10,9 @@ set -ex
 download_file() {
 	for retry in 0 1 2
 	do
-		if [[ $retry -gt 2 ]];then
-			break
-		fi
 		gsutil cp "$1/$2" "$3"
 		if [[ ! -f "$2" ]];then
-			echo NO "$2" found, retry
+			echo NO "$2" found, retry=$retry
 		else
             echo "$2" dowloaded
 			break
@@ -41,6 +38,7 @@ sleep 5
 [[ ! -f "env-artifact.sh" ]] && echo no "env-artifact.sh" downloaded && exit 2
 # shellcheck source=/dev/null
 source $HOME/.profile
+# shellcheck source=env-artifact.sh
 source $HOME/env-artifact.sh
 
 # export Env for refund)users.ts

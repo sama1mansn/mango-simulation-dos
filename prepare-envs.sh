@@ -31,6 +31,10 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$MANGO_SIMULATION_PRIVATE_BUCKET" ]]&& MANGO_SIMULATION_PRIVATE_BUCKET="mango-simulation-private" && no MANGO_SIMULATION_PRIVATE_BUCKET use $MANGO_SIMULATION_PRIVATE_BUCKET
 [[ ! "$ARTIFACT_BUCKET" ]]&& ARTIFACT_BUCKET="buildkite-dos-agent" && no MANGO_SIMULATION_PRIVATE_BUCKET use $ARTIFACT_BUCKET
 [[ ! "$TERMINATION_CHECK_INTERVAL" ]]&& TERMINATION_CHECK_INTERVAL=30 && no TERMINATION_CHECK_INTERVAL use $TERMINATION_CHECK_INTERVAL
+# set large data set
+[[ ! $LARGE_DATA_SET ]] && LARGE_DATA_SET="false"
+[[ ! $INFLUX_WINDOW_INTERVAL ]] && INFLUX_WINDOW_INTERVAL="10m"
+[[ ! $INFLUX_WINDOW_INTERVAL_LONG ]] && INFLUX_WINDOW_INTERVAL_LONG="30m"
 
 source utils.sh
 echo ----- stage: prepare metrics env ------ 
@@ -84,6 +88,11 @@ echo "BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER" >> env-artifact.sh
 echo "ARTIFACT_BUCKET=$ARTIFACT_BUCKET" >> env-artifact.sh
 echo "ENV_ARTIFACT_FILE=env-artifact.sh" >> env-artifact.sh
 echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
+
+## large data set
+echo "LARGE_DATA_SET=$LARGE_DATA_SET" >> env-artifact.sh
+echo "INFLUX_WINDOW_INTERVAL=$INFLUX_WINDOW_INTERVAL" >> env-artifact.sh
+echo "INFLUX_WINDOW_INTERVAL_LONG=$INFLUX_WINDOW_INTERVAL_LONG" >> env-artifact.sh
 
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
