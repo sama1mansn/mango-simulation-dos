@@ -41,8 +41,7 @@ echo ----- stage: prepare metrics env for both query and write ------
 [[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
 download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" dos-metrics-env.sh ./
 [[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
-[[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
-[[ ! $REPORT_BUCKET ]] && REPORT_BUCKET="benchmark-report-tmp" && echo no REPORT_BUCKET use "$REPORT_BUCKET"
+[[ ! $DOS_REPORT_BUCKET ]] && DOS_REPORT_BUCKET="mango-simulation-dos" && echo no DOS_REPORT_BUCKET use "$DOS_REPORT_BUCKET"
 
 echo ----- stage: prepare ssh key to dynamic clients ------
 download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" id_ed25519_dos_test ./
