@@ -321,16 +321,15 @@ DATAPOINT[blocks_90_full]="$percent_raw_value"
 
 #write data report to the influx
 
-build="$BUILDKITE_BUILD_ID"
-[[ ! "$BUILDKITE_BUILD_ID" ]] && build="na"
+build="$BUILDKITE_BUILD_NUMBER"
+[[ ! "$BUILDKITE_BUILD_NUMBER" ]] && build="0"
 utc_sec=$(date +%s)
 write_ts=$(echo "scale=2;${utc_sec}*1000000000" | bc)
 
 for r in "${!DATAPOINT[@]}"
 do
 	measurement=${FIELD_MEASUREMENT[$r]}
-	write_data="$measurement,build=$build,test_type=$test_type,client=$client,branch=$SOLANA_BUILD_BRANCH,git_commit=$git_commit,cluster_version=$cluster_version,\
-clients_num=$num_clients,duration=$duration,tx_count=$tx_count,thread_batch_sleep_ms=$thread_batch_sleep_ms,durable_nonce=$USE_DURABLE_NONCE $r=${DATAPOINT[$r]} $write_ts"
+	write_data="$measurement,build=$build,cluster_version=$cluster_version,number_of_clients=$num_clients,duration=$duration,qoutes_per_second=$qoutes_per_second $r=${DATAPOINT[$r]} $write_ts"
     write_datapoint_v2 "$write_data" "$API_V2_HOST"
 done
 
