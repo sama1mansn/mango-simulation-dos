@@ -94,6 +94,7 @@ echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
 echo "LARGE_DATA_SET=$LARGE_DATA_SET" >> env-artifact.sh
 echo "INFLUX_WINDOW_INTERVAL=$INFLUX_WINDOW_INTERVAL" >> env-artifact.sh
 echo "INFLUX_WINDOW_INTERVAL_LONG=$INFLUX_WINDOW_INTERVAL_LONG" >> env-artifact.sh
-
+# Report to influxdb
+echo "DOS_REPORT_BUCKET=$DOS_REPORT_BUCKET" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
