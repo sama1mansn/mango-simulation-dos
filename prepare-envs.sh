@@ -37,10 +37,11 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! $INFLUX_WINDOW_INTERVAL_LONG ]] && INFLUX_WINDOW_INTERVAL_LONG="30m"
 
 source utils.sh
-echo ----- stage: prepare metrics env ------ 
+echo ----- stage: prepare metrics env for both query and write ------ 
 [[ -f "dos-metrics-env.sh" ]]&& rm dos-metrics-env.sh
 download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" dos-metrics-env.sh ./
 [[ ! -f "dos-metrics-env.sh" ]]&& echo "NO dos-metrics-env.sh found" && exit 1
+[[ ! $DOS_REPORT_BUCKET ]] && DOS_REPORT_BUCKET="mango-simulation-dos" && echo no DOS_REPORT_BUCKET use "$DOS_REPORT_BUCKET"
 
 echo ----- stage: prepare ssh key to dynamic clients ------
 download_file "gs://$MANGO_SIMULATION_PRIVATE_BUCKET" id_ed25519_dos_test ./
@@ -93,6 +94,7 @@ echo "MANGO_SIMULATION_ARTIFACT_FILE=mango-simulation" >> env-artifact.sh
 echo "LARGE_DATA_SET=$LARGE_DATA_SET" >> env-artifact.sh
 echo "INFLUX_WINDOW_INTERVAL=$INFLUX_WINDOW_INTERVAL" >> env-artifact.sh
 echo "INFLUX_WINDOW_INTERVAL_LONG=$INFLUX_WINDOW_INTERVAL_LONG" >> env-artifact.sh
-
+# Report to influxdb
+echo "DOS_REPORT_BUCKET=$DOS_REPORT_BUCKET" >> env-artifact.sh
 cat dos-metrics-env.sh >> env-artifact.sh
 exit 0
