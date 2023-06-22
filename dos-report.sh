@@ -6,7 +6,6 @@ source dos-report-env.sh
 source env-artifact.sh
 # check ENV
 # no env , exit
-[[ ! $SLACK_WEBHOOK ]]&&[[ ! $DISCORD_WEBHOOK ]]&& echo no WEBHOOK found&&exit 1
 [[ ! $DISCORD_AVATAR_URL ]]&&DISCORD_AVATAR_URL="https://i.imgur.com/LJismmJ.jpg" || echo use DISCORD_AVATAR_URL=$DISCORD_AVATAR_URL
 [[ ! $START_TIME ]]&& echo START_TIME env not found&&exit 1
 [[ ! $START_TIME2 ]]&& echo START_TIME2 env not found&&exit 1
@@ -164,7 +163,7 @@ result_detail=""
 # time for influx only
 DATAPOINT[start_time]="$start_time"
 DATAPOINT[stop_time]="$stop_time"
-printf -v time_range_str 'time range: %s ~ %s' \
+printf -v time_range_str "\"%s ~ %s\"" \
         "$(date --rfc-3339=seconds -u -d @$start_time)" "$(date --rfc-3339=seconds -u -d @$stop_time)"
 DATAPOINT[time_range]="$time_range_str"
 # slot
@@ -329,7 +328,8 @@ write_ts=$(echo "scale=2;${utc_sec}*1000000000" | bc)
 for r in "${!DATAPOINT[@]}"
 do
 	measurement=${FIELD_MEASUREMENT[$r]}
-	write_data="$measurement,build=$build,cluster_version=$cluster_version,number_of_clients=$num_clients,duration=$duration,qoutes_per_second=$qoutes_per_second $r=${DATAPOINT[$r]} $write_ts"
+	write_data="$measurement,build=$build,cluster_version=$cluster_version,number_of_clients=$num_clients,duration=$duration,\
+qoutes_per_second=$qoutes_per_second $r=${DATAPOINT[$r]} $write_ts"
     write_datapoint_v2 "$write_data" "$API_V2_HOST"
 done
 
