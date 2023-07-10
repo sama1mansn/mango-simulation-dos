@@ -319,6 +319,7 @@ blocks_fill_90_percent_txt="blocks_90_full: $percent_value"
 DATAPOINT[blocks_90_full]="$percent_raw_value"
 # skip_rate
 result_input="${FLUX_RESULT['mean_skip_rate']}"
+echo mean_skip_rate_result="$result_input"
 get_value
 mean_skip_rate_txt="mean_skip_rate: $_value%"
 DATAPOINT[mean_skip_rate]="$_value"

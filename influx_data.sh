@@ -234,7 +234,8 @@ _mean_skip_rate='data_max=from(bucket: "tds")|> range(start:'${start_time}' ,sto
 				|> map(fn: (r) => ({ r with skip_slot: r.slot_diff - r.block_diff }))
 				|> filter(fn: (r) => r.slot_diff > 0)
 				|> map(fn: (r) => ({ r with skip_rate_percent: r.skip_slot*100/r.slot_diff }))
-				|> keep(columns: ["skip_rate_percent"])|> group()|> mean(column:"skip_rate_percent")'
+				|> keep(columns: ["skip_rate_percent"])|> group()|> mean(column:"skip_rate_percent")
+				|> rename(columns: {skip_rate_percent: "_value"})'
 _max_skip_rate='data_max=from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 				|> filter(fn: (r) => r["_measurement"] == "bank-new_from_parent-heights")
 				|> filter(fn: (r) => r["_field"] == "slot" or r["_field"] == "block_height")
@@ -259,7 +260,8 @@ _max_skip_rate='data_max=from(bucket: "tds")|> range(start:'${start_time}' ,stop
 				|> map(fn: (r) => ({ r with skip_slot: r.slot_diff - r.block_diff }))
 				|> filter(fn: (r) => r.slot_diff > 0)
 				|> map(fn: (r) => ({ r with skip_rate_percent: r.skip_slot*100/r.slot_diff }))
-				|> keep(columns: ["skip_rate_percent"])|> group()|> max(column:"skip_rate_percent")'
+				|> keep(columns: ["skip_rate_percent"])|> group()|> max(column:"skip_rate_percent")
+				|> rename(columns: {skip_rate_percent: "_value"})'
 
 _skip_rate_90='data_max=from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 				|> filter(fn: (r) => r["_measurement"] == "bank-new_from_parent-heights")
@@ -285,7 +287,8 @@ _skip_rate_90='data_max=from(bucket: "tds")|> range(start:'${start_time}' ,stop:
 				|> map(fn: (r) => ({ r with skip_slot: r.slot_diff - r.block_diff }))
 				|> filter(fn: (r) => r.slot_diff > 0)
 				|> map(fn: (r) => ({ r with skip_rate_percent: r.skip_slot*100/r.slot_diff }))
-				|> keep(columns: ["skip_rate_percent"])|> group()|> quantile(column: "skip_rate_percent", q: 0.90)'
+				|> keep(columns: ["skip_rate_percent"])|> group()|> quantile(column: "skip_rate_percent", q: 0.90)
+				|> rename(columns: {skip_rate_percent: "_value"})'
 
 declare -A FLUX  # FLUX command
 FLUX[start_slot]=$_start_slot
