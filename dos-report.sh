@@ -324,19 +324,19 @@ DATAPOINT[blocks_90_full]="$percent_raw_value"
 result_input="${FLUX_RESULT['mean_skip_rate']}"
 echo mean_skip_rate_result="$result_input"
 get_value
-printf -v precision "%.2" "$_value"
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
 mean_skip_rate_txt="mean_skip_rate: $precision%"
 DATAPOINT[mean_skip_rate]="$_value"
 
 result_input="${FLUX_RESULT['max_skip_rate']}"
 get_value
-printf -v precision "%.2" "$_value"
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
 mean_skip_rate_txt="max_skip_rate: $precision%"
 DATAPOINT[max_skip_rate]="$_value"
 
 result_input="${FLUX_RESULT['skip_rate_90']}"
 get_value
-printf -v precision "%.2" "$_value"
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
 skip_rate_90_txt="skip_rate_90: $precision%"
 DATAPOINT[skip_rate_90]="$_value"
 
