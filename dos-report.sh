@@ -43,11 +43,14 @@ instances=$INSTANCES
 ## setup window interval for query
 window_interval="10s" 
 window_interval_long="10s"
+oversize_window=$(echo "${DURATION}+300" | bc)
+printf -v oversize_window "%ss" "$oversize_window"
 if [[ "$LARGE_DATA_SET" == "true" ]];then
 	[[ ! "$INFLUX_WINDOW_INTERVAL" ]] && INFLUX_WINDOW_INTERVAL="10m"
 	[[ ! "$INFLUX_WINDOW_INTERVAL_LONG" ]] && INFLUX_WINDOW_INTERVAL_LONG="30m"
 	window_interval=$INFLUX_WINDOW_INTERVAL
 	window_interval_long=$INFLUX_WINDOW_INTERVAL_LONG
+	oversize_window="12h"
 fi
 
 ## make sure 
