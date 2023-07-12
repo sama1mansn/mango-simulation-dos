@@ -43,11 +43,14 @@ instances=$INSTANCES
 ## setup window interval for query
 window_interval="10s" 
 window_interval_long="10s"
+oversize_window=$(echo "${DURATION}+300" | bc)
+printf -v oversize_window "%ss" "$oversize_window"
 if [[ "$LARGE_DATA_SET" == "true" ]];then
 	[[ ! "$INFLUX_WINDOW_INTERVAL" ]] && INFLUX_WINDOW_INTERVAL="10m"
 	[[ ! "$INFLUX_WINDOW_INTERVAL_LONG" ]] && INFLUX_WINDOW_INTERVAL_LONG="30m"
 	window_interval=$INFLUX_WINDOW_INTERVAL
 	window_interval_long=$INFLUX_WINDOW_INTERVAL_LONG
+	oversize_window="12h"
 fi
 
 ## make sure 
@@ -317,6 +320,24 @@ else
 fi
 blocks_fill_90_percent_txt="blocks_90_full: $percent_value"
 DATAPOINT[blocks_90_full]="$percent_raw_value"
+# skip_rate
+result_input="${FLUX_RESULT['mean_skip_rate']}"
+get_value
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
+mean_skip_rate_txt="mean_skip_rate: $precision%"
+DATAPOINT[mean_skip_rate]="$precision"
+
+result_input="${FLUX_RESULT['max_skip_rate']}"
+get_value
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
+max_skip_rate_txt="max_skip_rate: $precision%"
+DATAPOINT[max_skip_rate]="$precision"
+
+result_input="${FLUX_RESULT['skip_rate_90']}"
+get_value
+[[ $_value != "na" ]] && printf -v precision "%.2f" "$_value" || precision="na"
+skip_rate_90_txt="skip_rate_90: $precision%"
+DATAPOINT[skip_rate_90]="$precision"
 
 #write data report to the influx
 
