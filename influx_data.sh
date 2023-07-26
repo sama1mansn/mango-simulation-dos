@@ -10,37 +10,29 @@ _end_slot='from(bucket: "tds")|> range(start:'${stop_time2}' ,stop:'${stop_time}
 			|> group(columns: ["slot"])|> median()
 			|> drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id", "slot"])'
 
-# TPS
+# TPS: Notetice that tthe result of TPS need to divide window_interval to get the correct result
 _mean_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
-					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count")
-	   				|> aggregateWindow(every: '${window_interval}', fn: mean)
-					|> group()|>mean()|>toInt()
-					|> drop(columns: ["_start", "_stop","count"])'
+    				|> filter(fn: (r) => r._measurement == "replay-slot-stats" and r._field == "total_transactions")
+    				|> aggregateWindow(every:'${window_interval}', fn: sum)
+    				|> group() |> median()|>toInt()'
 _max_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
-					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count")
-	   				|> aggregateWindow(every: '${window_interval}', fn: max)
-					|> group()|>max()|>toInt()
-					|> drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
+    				|> filter(fn: (r) => r._measurement == "replay-slot-stats" and r._field == "total_transactions")
+    				|> aggregateWindow(every:'${window_interval}', fn: sum)
+    				|> group() |> max()
+					|>drop(columns: ["_measurement", "_start", "_stop","host_id","_field"])'
 _min_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
-					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count")
-	   				|> aggregateWindow(every: '${window_interval}', fn: min)
-					|> group()|>min()|>toInt()
-					|> drop(columns: ["_measurement", "_field", "_start", "_stop","_time","host_id","count"])'
-
+    				|> filter(fn: (r) => r._measurement == "replay-slot-stats" and r._field == "total_transactions")
+    				|> aggregateWindow(every:'${window_interval}', fn: sum)
+    				|> group() |> min()'
 _90_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
-					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count" )
-    				|> aggregateWindow(every: '${window_interval_long}',  fn: (column, tables=<-) => tables |> quantile(q: 0.9))
-    				|> group()
-    				|> quantile(column: "_value", q:0.9)|>toInt()
-    				|> drop(columns: ["_measurement", "_field", "_start", "_stop","count"])'
+					|> filter(fn: (r) => r._measurement == "replay-slot-stats" and r._field == "total_transactions")
+    				|> aggregateWindow(every: '${window_interval_long}',  fn: sum)
+    				|> group()|> quantile(column: "_value", q:0.9)'
 
 _99_tx_count='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
-					|> filter(fn: (r) => r._measurement == "bank-process_transactions" and r._field == "count" )
-    				|> aggregateWindow(every: '${window_interval_long}',  fn: (column, tables=<-) => tables |> quantile(q: 0.99))
-    				|> group()
-    				|> quantile(column: "_value", q:0.99)|>toInt()
-    				|> drop(columns: ["_measurement", "_field", "_start", "_stop","count"])'
-
+					|> filter(fn: (r) => r._measurement == "replay-slot-stats" and r._field == "total_transactions")
+    				|> aggregateWindow(every: '${window_interval_long}',  fn: sum)
+    				|> group()|> quantile(column: "_value", q:0.99)'
 # tower distance
 _mean_tower_vote_distance='from(bucket: "tds")|> range(start:'${start_time}' ,stop:'${stop_time}')
 					|> filter(fn: (r) => r._measurement == "tower-vote")
